@@ -1,0 +1,55 @@
+name: construction_manager_app
+
+description: "A new Flutter project."
+publish_to: "none"
+
+version: 1.0.0+1
+
+# ✅ Dart SDK Environment
+environment:
+  sdk: ^3.7.2
+
+# ✅ Project Dependencies
+dependencies:
+  flutter:
+    sdk: flutter
+  concentric_transition: ^1.0.3
+  lottie: ^3.3.1
+  cupertino_icons: ^1.0.8
+  image_picker: ^1.0.4
+  smooth_page_indicator: ^1.1.0
+  animated_text_kit: ^4.2.3
+  animate_do: ^3.1.2
+
+# ✅ Developer Dependencies
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.6
+
+# ✅ Launcher Icon Configuration
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/icons.png"
+
+# ✅ Native Splash Screen Configuration
+flutter_native_splash:
+  color: "#FFFFFF" # Background color for splash screen
+  image: assets/icons/icons.png # Splash image path
+  android: true
+  ios: true
+
+# ✅ Flutter Project Settings
+flutter:
+  uses-material-design: true
+
+  # ✅ Asset Files
+  assets:
+    - assets\animations\construction_site.json
+    - assets\animations\construction_site2.json
+    - assets\animations\construction_site3.json
+    - assets\animations\construction_site4.json
+    - assets\animations\login_animation.json
