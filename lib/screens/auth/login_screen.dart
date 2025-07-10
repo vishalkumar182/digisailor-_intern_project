@@ -4,6 +4,9 @@ import 'package:construction_manager_app/widgets/rounded_text_field.dart';
 import 'package:construction_manager_app/widgets/rounded_button.dart';
 import 'package:construction_manager_app/models/auth/login_model.dart';
 import 'package:lottie/lottie.dart';
+import 'package:construction_manager_app/services/auth/login_service.dart';
+import 'package:construction_manager_app/screens/admin/dashboard/dashboard.dart';
+import 'package:construction_manager_app/screens/supervisor/dashboard/dashboard.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -28,20 +31,50 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  // Function to handle login button pressed
-  void _handleLogin() {
-    // Update model with current text field values
+  final LoginService _loginService = LoginService();
+
+  void _handleLogin() async {
+    // Create a LoginModel instance using trimmed inputs from the text controllers
     loginModel = LoginModel(
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
     );
 
-    // Basic validation check - can improve later
+    // Validate the loginModel locally before making any server request
     if (loginModel.isValid()) {
-      debugPrint('Login pressed with email: ${loginModel.email}');
-      // TODO: Call backend API or navigate to next screen
+      // Since API integration is pending, we're calling a dummy login method that simulates login
+      // Future: Replace _loginService.loginUser with actual API call passing loginModel data
+      String? userType = await _loginService.loginUser(loginModel);
+
+      // Check the returned user type and navigate accordingly
+      if (userType == 'admin') {
+        debugPrint("Admin Login Successful — Navigate to Admin Dashboard");
+
+        // Navigate to Admin Dashboard screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const AdminDashboardScreen()),
+        );
+      } else if (userType == 'supervisor') {
+        debugPrint(
+          "Supervisor Login Successful — Navigate to Supervisor Dashboard",
+        );
+
+        // Navigate to Supervisor Dashboard screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SupervisorDashboardScreen(),
+          ),
+        );
+      } else {
+        // If login failed due to invalid credentials (from dummy or API), show a SnackBar to the user
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Invalid credentials')));
+      }
     } else {
-      // Show error (for now simple snackbar)
+      // If the local validation failed (email format or password length), notify the user immediately
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter a valid email and password (6+ chars)'),

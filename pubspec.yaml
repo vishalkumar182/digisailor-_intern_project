@@ -1,18 +1,21 @@
+# Project name and description
 name: construction_manager_app
-
 description: "A new Flutter project."
-publish_to: "none"
+publish_to: "none" # This project is not published to pub.dev
 
+# Version of the app
 version: 1.0.0+1
 
-# ✅ Dart SDK Environment
+# Dart SDK environment requirement
 environment:
-  sdk: ^3.7.2
+  sdk: ^3.7.2 # Specify Dart SDK version compatible with project
 
-# ✅ Project Dependencies
+# Project dependencies
 dependencies:
   flutter:
-    sdk: flutter
+    sdk: flutter # Flutter SDK dependency
+
+  # Additional packages used in project
   concentric_transition: ^1.0.3
   lottie: ^3.3.1
   cupertino_icons: ^1.0.8
@@ -20,36 +23,46 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   animated_text_kit: ^4.2.3
   animate_do: ^3.1.2
+  font_awesome_flutter: ^10.8.0
+  flutter_svg: ^2.2.0 # For SVG icon support
 
-# ✅ Developer Dependencies
+# Developer dependencies for testing and linting
 dev_dependencies:
   flutter_test:
-    sdk: flutter
-  flutter_lints: ^6.0.0
-  flutter_launcher_icons: ^0.14.3
-  flutter_native_splash: ^2.4.6
+    sdk: flutter # Flutter testing framework
+  flutter_lints: ^6.0.0 # Lint rules to keep code clean
+  flutter_launcher_icons: ^0.14.3 # For generating launcher icons
+  flutter_native_splash: ^2.4.6 # For native splash screen setup
 
-# ✅ Launcher Icon Configuration
+# Launcher icon configuration
 flutter_launcher_icons:
-  android: true
-  ios: true
-  image_path: "assets/icons/icons.png"
+  android: true # Generate Android launcher icons
+  ios: true # Generate iOS launcher icons
+  image_path: "assets/icons/icons.png" # Source image for launcher icons
 
-# ✅ Native Splash Screen Configuration
+# Native splash screen configuration
 flutter_native_splash:
-  color: "#FFFFFF" # Background color for splash screen
+  color: "#FFFFFF" # Background color of splash screen
   image: assets/icons/icons.png # Splash image path
   android: true
   ios: true
 
-# ✅ Flutter Project Settings
+# Flutter specific settings
 flutter:
-  uses-material-design: true
+  uses-material-design: true # Use Material Design widgets and icons
 
-  # ✅ Asset Files
+  # Declare assets used in the project
   assets:
-    - assets\animations\construction_site.json
-    - assets\animations\construction_site2.json
-    - assets\animations\construction_site3.json
-    - assets\animations\construction_site4.json
-    - assets\animations\login_animation.json
+    # Animation JSON files
+    - assets/animations/construction_site.json
+    - assets/animations/construction_site2.json
+    - assets/animations/construction_site3.json
+    - assets/animations/construction_site4.json
+    - assets/animations/login_animation.json
+    - assets/animations/icons8-home.json
+
+    # Icons (PNG and SVG)
+    - assets/icons/home.svg
+    - assets/icons/user.svg
+    - assets/icons/entries.svg
+    - "assets/icons/profile.png"
