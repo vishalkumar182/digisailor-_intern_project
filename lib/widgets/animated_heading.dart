@@ -19,18 +19,24 @@ class AnimatedHeading extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      // ignore: deprecated_member_use
-      child: TyperAnimatedTextKit(
-        text: [text],
-        textStyle:
-            style ??
-            const TextStyle(
-              color: Colors.black,
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
-            ),
-        speed: speed,
-        isRepeatingAnimation: isRepeating,
+      child: AnimatedTextKit(
+        animatedTexts: [
+          TyperAnimatedText(
+            text,
+            textStyle:
+                style ??
+                const TextStyle(
+                  color: Colors.black,
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                ),
+            speed: speed,
+          ),
+        ],
+        totalRepeatCount: isRepeating ? 1000 : 1,
+        pause: const Duration(milliseconds: 500),
+        displayFullTextOnTap: true,
+        stopPauseOnTap: true,
       ),
     );
   }

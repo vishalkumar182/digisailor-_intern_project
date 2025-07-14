@@ -5,6 +5,7 @@ class RoundedTextField extends StatelessWidget {
   final IconData icon;
   final bool obscureText;
   final TextEditingController controller;
+  final TextInputType keyboardType;
 
   const RoundedTextField({
     super.key,
@@ -12,7 +13,7 @@ class RoundedTextField extends StatelessWidget {
     required this.icon,
     this.obscureText = false,
     required this.controller,
-    required TextInputType keyboardType,
+    this.keyboardType = TextInputType.text, // 👈 default diya safe ke liye
   });
 
   @override
@@ -20,6 +21,7 @@ class RoundedTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       obscureText: obscureText,
+      keyboardType: keyboardType, // 👈 yaha assign kar diya
       decoration: InputDecoration(
         prefixIcon: Icon(icon, color: Colors.grey),
         hintText: hintText,
