@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:construction_manager_app/screens/supervisor/entry_detail_screen.dart';
 
 class SupervisorEntriesScreen extends StatefulWidget {
   const SupervisorEntriesScreen({super.key});
@@ -15,30 +16,47 @@ class _SupervisorEntriesScreenState extends State<SupervisorEntriesScreen> {
 
   final List<String> categories = ['All', 'Submitted', 'Draft'];
 
-  final List<Map<String, String>> entries = [
+  final List<Map<String, dynamic>> entries = [
     {
+      'id': '1',
       'project': 'Residential Tower',
       'location': 'Delhi',
       'date': '12 July 2025',
       'employees': '18',
       'hours': '144',
       'status': 'Submitted',
+      'employeesData': [
+        {'id': 'e1', 'name': 'Amit Sharma', 'role': 'Worker'},
+        {'id': 'e2', 'name': 'Ravi Kumar', 'role': 'Foreman'},
+      ],
+      'timesheet': {'totalHours': '144', 'submitted': '12 July 2025'},
     },
     {
+      'id': '2',
       'project': 'School Renovation',
       'location': 'Mumbai',
       'date': '11 July 2025',
       'employees': '10',
       'hours': '80',
       'status': 'Draft',
+      'employeesData': [
+        {'id': 'e3', 'name': 'Priya Menon', 'role': 'Worker'},
+      ],
+      'timesheet': {'totalHours': '80', 'submitted': '11 July 2025'},
     },
     {
+      'id': '3',
       'project': 'Mall Construction',
       'location': 'Lucknow',
       'date': '09 July 2025',
       'employees': '22',
       'hours': '176',
       'status': 'Submitted',
+      'employeesData': [
+        {'id': 'e4', 'name': 'Suresh Patel', 'role': 'Worker'},
+        {'id': 'e5', 'name': 'Vikram Singh', 'role': 'Foreman'},
+      ],
+      'timesheet': {'totalHours': '176', 'submitted': '09 July 2025'},
     },
   ];
 
@@ -52,11 +70,9 @@ class _SupervisorEntriesScreenState extends State<SupervisorEntriesScreen> {
     final verticalPadding = screenHeight * 0.02;
 
     return Scaffold(
-      resizeToAvoidBottomInset: true, // Future-proof for input fields
+      resizeToAvoidBottomInset: true,
       backgroundColor:
-          isDarkMode
-              ? CupertinoColors.black
-              : const Color(0xFFD3E0EA), // Darker background
+          isDarkMode ? CupertinoColors.black : const Color(0xFFD3E0EA),
       appBar: AppBar(
         backgroundColor:
             isDarkMode ? CupertinoColors.darkBackgroundGray : Colors.white,
@@ -116,7 +132,6 @@ class _SupervisorEntriesScreenState extends State<SupervisorEntriesScreen> {
     );
   }
 
-  /// Category chips selector at top
   Widget _buildCategorySelector(
     bool isDarkMode,
     double screenWidth,
@@ -165,7 +180,6 @@ class _SupervisorEntriesScreenState extends State<SupervisorEntriesScreen> {
     );
   }
 
-  /// Category chip widget
   Widget _CategoryChip({
     required String category,
     required bool isSelected,
@@ -176,7 +190,7 @@ class _SupervisorEntriesScreenState extends State<SupervisorEntriesScreen> {
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200), // Minimal animation
+        duration: const Duration(milliseconds: 200),
         padding: EdgeInsets.symmetric(
           horizontal: screenWidth * 0.04,
           vertical: screenWidth * 0.02,
@@ -227,147 +241,162 @@ class _SupervisorEntriesScreenState extends State<SupervisorEntriesScreen> {
     );
   }
 
-  /// Each entry card
   Widget _buildEntryCard(
-    Map<String, String> entry,
+    Map<String, dynamic> entry,
     bool isDarkMode,
     double screenWidth,
     double screenHeight,
   ) {
-    return Container(
-      margin: EdgeInsets.only(bottom: screenHeight * 0.02),
-      decoration: BoxDecoration(
-        color: isDarkMode ? const Color(0xFF1C2526) : const Color(0xFFE8ECEF),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color:
-              isDarkMode
-                  ? Colors.white.withOpacity(0.2)
-                  : const Color(0xFFCED4DA),
-          width: 1.5,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(isDarkMode ? 0.25 : 0.15),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-            spreadRadius: 2,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EntryDetailScreen(entry: entry),
           ),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(screenWidth * 0.04),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              entry['project']!,
-              style: TextStyle(
-                fontSize: screenWidth * 0.045,
-                fontWeight: FontWeight.w700,
-                color: isDarkMode ? Colors.white : const Color(0xFF1C2526),
-              ),
-            ),
-            SizedBox(height: screenHeight * 0.015),
-            Row(
-              children: [
-                Icon(
-                  CupertinoIcons.location_solid,
-                  size: screenWidth * 0.045,
-                  color: isDarkMode ? Colors.white70 : const Color(0xFF5856D6),
-                ),
-                SizedBox(width: screenWidth * 0.015),
-                Text(
-                  entry['location']!,
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.04,
-                    color:
-                        isDarkMode ? Colors.white70 : const Color(0xFF6B7280),
-                  ),
-                ),
-                const Spacer(),
-                Icon(
-                  CupertinoIcons.calendar,
-                  size: screenWidth * 0.045,
-                  color: isDarkMode ? Colors.white70 : const Color(0xFFFF9500),
-                ),
-                SizedBox(width: screenWidth * 0.015),
-                Text(
-                  entry['date']!,
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.04,
-                    color:
-                        isDarkMode ? Colors.white70 : const Color(0xFF6B7280),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: screenHeight * 0.015),
-            Row(
-              children: [
-                _buildInfoChip(
-                  CupertinoIcons.person_2_fill,
-                  '${entry['employees']} employees',
-                  isDarkMode,
-                  screenWidth,
-                  const Color(0xFF007AFF),
-                ),
-                SizedBox(width: screenWidth * 0.025),
-                _buildInfoChip(
-                  CupertinoIcons.clock_fill,
-                  '${entry['hours']} hrs',
-                  isDarkMode,
-                  screenWidth,
-                  const Color(0xFF34C759),
-                ),
-              ],
-            ),
-            SizedBox(height: screenHeight * 0.015),
-            Row(
-              children: [
-                _buildStatusChip(entry['status']!, isDarkMode, screenWidth),
-                const Spacer(),
-                CupertinoButton(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: screenWidth * 0.04,
-                    vertical: screenWidth * 0.015,
-                  ),
-                  color: const Color(0xFF007AFF),
-                  borderRadius: BorderRadius.circular(14),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        CupertinoIcons.eye,
-                        size: screenWidth * 0.04,
-                        color: Colors.white,
-                      ),
-                      SizedBox(width: screenWidth * 0.015),
-                      Text(
-                        'View',
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.035,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                  onPressed: () {
-                    HapticFeedback.lightImpact();
-                    // TODO: View details action
-                  },
-                ),
-              ],
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: screenHeight * 0.02),
+        decoration: BoxDecoration(
+          color: isDarkMode ? const Color(0xFF1C2526) : const Color(0xFFE8ECEF),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color:
+                isDarkMode
+                    ? Colors.white.withOpacity(0.2)
+                    : const Color(0xFFCED4DA),
+            width: 1.5,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(isDarkMode ? 0.25 : 0.15),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+              spreadRadius: 2,
             ),
           ],
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(screenWidth * 0.04),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                entry['project'],
+                style: TextStyle(
+                  fontSize: screenWidth * 0.045,
+                  fontWeight: FontWeight.w700,
+                  color: isDarkMode ? Colors.white : const Color(0xFF1C2526),
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.015),
+              Row(
+                children: [
+                  Icon(
+                    CupertinoIcons.location_solid,
+                    size: screenWidth * 0.045,
+                    color:
+                        isDarkMode ? Colors.white70 : const Color(0xFF5856D6),
+                  ),
+                  SizedBox(width: screenWidth * 0.015),
+                  Text(
+                    entry['location'],
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.04,
+                      color:
+                          isDarkMode ? Colors.white70 : const Color(0xFF6B7280),
+                    ),
+                  ),
+                  const Spacer(),
+                  Icon(
+                    CupertinoIcons.calendar,
+                    size: screenWidth * 0.045,
+                    color:
+                        isDarkMode ? Colors.white70 : const Color(0xFFFF9500),
+                  ),
+                  SizedBox(width: screenWidth * 0.015),
+                  Text(
+                    entry['date'],
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.04,
+                      color:
+                          isDarkMode ? Colors.white70 : const Color(0xFF6B7280),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: screenHeight * 0.015),
+              Row(
+                children: [
+                  _buildInfoChip(
+                    CupertinoIcons.person_2_fill,
+                    '${entry['employees']} employees',
+                    isDarkMode,
+                    screenWidth,
+                    const Color(0xFF007AFF),
+                  ),
+                  SizedBox(width: screenWidth * 0.025),
+                  _buildInfoChip(
+                    CupertinoIcons.clock_fill,
+                    '${entry['hours']} hrs',
+                    isDarkMode,
+                    screenWidth,
+                    const Color(0xFF34C759),
+                  ),
+                ],
+              ),
+              SizedBox(height: screenHeight * 0.015),
+              Row(
+                children: [
+                  _buildStatusChip(entry['status'], isDarkMode, screenWidth),
+                  const Spacer(),
+                  CupertinoButton(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.04,
+                      vertical: screenWidth * 0.015,
+                    ),
+                    color: const Color(0xFF007AFF),
+                    borderRadius: BorderRadius.circular(14),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          CupertinoIcons.eye,
+                          size: screenWidth * 0.04,
+                          color: Colors.white,
+                        ),
+                        SizedBox(width: screenWidth * 0.015),
+                        Text(
+                          'View',
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.035,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                    onPressed: () {
+                      HapticFeedback.lightImpact();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EntryDetailScreen(entry: entry),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  /// Info chip widget (icon + text)
   Widget _buildInfoChip(
     IconData icon,
     String text,
@@ -412,7 +441,6 @@ class _SupervisorEntriesScreenState extends State<SupervisorEntriesScreen> {
     );
   }
 
-  /// Status chip widget (colored chip)
   Widget _buildStatusChip(String status, bool isDarkMode, double screenWidth) {
     Color chipColor;
     switch (status) {

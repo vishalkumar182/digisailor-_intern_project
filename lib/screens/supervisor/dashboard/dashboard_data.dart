@@ -1,6 +1,4 @@
-// lib/screens/supervisor/dashboard_data.dart
 import 'package:construction_manager_app/models/supervisor/dashboard/dashboard.dart';
-
 import 'package:flutter/material.dart';
 
 /// Contains all static data used in the dashboard

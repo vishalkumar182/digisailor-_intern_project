@@ -2,10 +2,12 @@ import 'package:construction_manager_app/models/supervisor/dashboard/dashboard.d
 import 'package:construction_manager_app/screens/supervisor/app_bar/app_bar.dart';
 import 'package:construction_manager_app/screens/supervisor/bottom_navigation/bottom_navigation.dart';
 import 'package:construction_manager_app/screens/supervisor/cusom_card/dashboard_card.dart';
+import 'package:construction_manager_app/screens/supervisor/dashboard/dashboard_data.dart';
 import 'package:construction_manager_app/screens/supervisor/entries/supervisor_entries_screen.dart';
 import 'package:construction_manager_app/screens/supervisor/quick_action/quick_actions.dart';
 import 'package:construction_manager_app/screens/supervisor/welcome_card/welcome_card.dart';
 import 'package:construction_manager_app/screens/supervisor/profiles/profile_screen.dart';
+// Added import
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -27,44 +29,9 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
   late Animation<double> _slideAnimation;
   late Animation<double> _fadeAnimation;
 
-  // Current project information
-  static const String currentProject = 'Tower Construction Phase II';
-
-  /// Dashboard cards configuration
-  final List<DashboardCard> _dashboardCards = [
-    DashboardCard(
-      title: 'Total Employees',
-      value: '12',
-      subtitle: '3 pending',
-      icon: Icons.task_alt,
-      color: Colors.blue,
-      trend: '+2 from yesterday',
-    ),
-    DashboardCard(
-      title: 'Checked in',
-      value: '24',
-      subtitle: 'On site now',
-      icon: Icons.people,
-      color: Colors.green,
-      trend: '2 on break',
-    ),
-    DashboardCard(
-      title: 'Checked out',
-      value: '0',
-      subtitle: 'All clear',
-      icon: Icons.security,
-      color: Colors.orange,
-      trend: 'Last: 2 days ago',
-    ),
-    DashboardCard(
-      title: 'Total hours',
-      value: '78%',
-      subtitle: 'This week',
-      icon: Icons.trending_up,
-      color: Colors.purple,
-      trend: '+12% from last week',
-    ),
-  ];
+  // Use data from DashboardData
+  final String currentProject = DashboardData.currentProject;
+  final List<DashboardCard> _dashboardCards = DashboardData.dashboardCards;
 
   @override
   void initState() {
@@ -145,7 +112,10 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
           ),
           DashboardCardsRow(cards: _dashboardCards, onCardTap: _handleCardTap),
           const SizedBox(height: 20),
-          QuickActionsSection(onActionPressed: _handleQuickAction),
+          QuickActionsSection(
+            onActionPressed: _handleQuickAction,
+            actions: ['Add Entry'], // Single action
+          ),
           const SizedBox(height: 20),
         ],
       ),
@@ -164,12 +134,24 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
 
   /// Handles quick action button presses
   void _handleQuickAction(String action) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Performing $action...'),
-        duration: const Duration(seconds: 2),
-      ),
-    );
+    if (action == 'Add Entry') {
+      HapticFeedback.lightImpact();
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder:
+              (context) =>
+                  const SupervisorEntriesScreen(), // Placeholder for add entry screen
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Performing $action...'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   /// Builds the sliding notification bar widget
@@ -184,15 +166,15 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue.shade50, Colors.blue.shade100],
+                colors: [const Color(0xFFD3E0EA), const Color(0xFFB0C4DE)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.blue.shade200),
+              border: Border.all(color: const Color(0xFFCED4DA)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.blue.withOpacity(0.1),
+                  color: Colors.black.withOpacity(0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),
@@ -203,13 +185,13 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.blue.shade100,
+                    color: const Color(0xFF007AFF).withOpacity(0.2),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     Icons.campaign,
                     size: 20,
-                    color: Colors.blue.shade700,
+                    color: const Color(0xFF007AFF),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -222,7 +204,7 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: Colors.blue.shade700,
+                          color: const Color(0xFF007AFF),
                         ),
                       ),
                       const SizedBox(height: 2),
@@ -262,10 +244,9 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: Colors.transparent,
       appBar:
           _currentIndex == 0
               ? SupervisorAppBar(
@@ -277,17 +258,29 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
                 isOnline: defaultAppBarData.isOnline,
                 onNotificationPressed: _toggleNotificationBar,
                 onProfilePressed: () {
-                  // Profile tap action - optional
                   print('Profile tapped');
                 },
               )
-              : null, // No AppBar for other tabs
+              : null,
       body: FadeTransition(
         opacity: _fadeAnimation,
-        child: Column(
+        child: Stack(
           children: [
-            if (_showNotificationBar) _buildNotificationBar(),
-            Expanded(child: _buildMainContent()),
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [const Color(0xFFD3E0EA), const Color(0xFFB0C4DE)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+            ),
+            Column(
+              children: [
+                if (_showNotificationBar) _buildNotificationBar(),
+                Expanded(child: _buildMainContent()),
+              ],
+            ),
           ],
         ),
       ),

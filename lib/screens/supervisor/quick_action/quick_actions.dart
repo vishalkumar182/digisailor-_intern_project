@@ -1,155 +1,96 @@
-import 'package:construction_manager_app/screens/supervisor/timesheet/add_entry.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-class QuickActionButton extends StatelessWidget {
-  final String title;
-  final IconData icon;
-  final Color color;
-  final VoidCallback onTap;
+/// Widget for quick action section with a single "Add Entry" card
+class QuickActionsSection extends StatelessWidget {
+  final Function(String) onActionPressed;
+  final List<String> actions;
 
-  const QuickActionButton({
+  const QuickActionsSection({
     super.key,
-    required this.title,
-    required this.icon,
-    required this.color,
-    required this.onTap,
+    required this.onActionPressed,
+    required this.actions,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () {
-          HapticFeedback.lightImpact();
-          onTap();
-        },
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: color.withOpacity(0.2), width: 1),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: color.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(icon, color: color, size: 24),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: color,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Quick Actions',
+          style: TextStyle(
+            fontSize: screenWidth * 0.05,
+            fontWeight: FontWeight.w700,
+            color: isDarkMode ? Colors.white : const Color(0xFF1C2526),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class QuickActionsSection extends StatelessWidget {
-  final Function(String) onActionPressed;
-
-  const QuickActionsSection({super.key, required this.onActionPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Quick Actions',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: Colors.black87,
-              letterSpacing: -0.5,
+        SizedBox(height: screenWidth * 0.02),
+        Container(
+          width: double.infinity,
+          child: Card(
+            elevation: 0,
+            color:
+                isDarkMode ? const Color(0xFF2C2C2E) : const Color(0xFFE8ECEF),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+              side: BorderSide(
+                color:
+                    isDarkMode
+                        ? Colors.white.withOpacity(0.2)
+                        : const Color(0xFFCED4DA),
+                width: 1,
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          _buildActionButtonsRow(
-            firstButton: QuickActionButton(
-              title: 'Add Entry',
-              icon: Icons.plus_one_rounded,
-              color: const Color(0xFF34C759),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder:
-                        (context) => const TimesheetForm(title: 'Add Entry'),
+            child: InkWell(
+              onTap: () => onActionPressed(actions[0]),
+              borderRadius: BorderRadius.circular(15),
+              child: Container(
+                padding: EdgeInsets.all(screenWidth * 0.04),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors:
+                        isDarkMode
+                            ? [const Color(0xFF3A3A3C), const Color(0xFF2C2C2E)]
+                            : [
+                              const Color(0xFFF7F9FC),
+                              const Color(0xFFE8ECEF),
+                            ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                );
-              },
-            ),
-            secondButton: QuickActionButton(
-              title: 'Safety Check',
-              icon: Icons.shield_rounded,
-              color: const Color(0xFFFF9500),
-              onTap: () => onActionPressed('safety_check'),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      CupertinoIcons.add_circled,
+                      size: screenWidth * 0.08,
+                      color: const Color(0xFF007AFF),
+                    ),
+                    SizedBox(width: screenWidth * 0.03),
+                    Text(
+                      'Add Entry',
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.045,
+                        fontWeight: FontWeight.w600,
+                        color:
+                            isDarkMode ? Colors.white : const Color(0xFF1C2526),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
-          const SizedBox(height: 12),
-          _buildActionButtonsRow(
-            firstButton: QuickActionButton(
-              title: 'Reports',
-              icon: Icons.bar_chart_rounded,
-              color: const Color(0xFF5856D6),
-              onTap: () => onActionPressed('reports'),
-            ),
-            secondButton: QuickActionButton(
-              title: 'Messages',
-              icon: Icons.message_rounded,
-              color: const Color(0xFF007AFF),
-              onTap: () => onActionPressed('messages'),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildActionButtonsRow({
-    required Widget firstButton,
-    required Widget secondButton,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(child: firstButton),
-          const SizedBox(width: 8),
-          Expanded(child: secondButton),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
