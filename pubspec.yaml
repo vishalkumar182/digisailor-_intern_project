@@ -27,6 +27,8 @@ dependencies:
   intl: ^0.20.2
   fl_chart: ^1.0.0
   flutter_svg: ^2.2.0 # For SVG icon support
+  flutter_staggered_animations: ^1.1.1
+  country_picker: ^2.0.27
 
 # Developer dependencies for testing and linting
 dev_dependencies:

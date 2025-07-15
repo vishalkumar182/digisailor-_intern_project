@@ -1,4 +1,4 @@
-import 'package:construction_manager_app/models/supervisor/dashboard_model/dashboard.dart';
+import 'package:construction_manager_app/models/supervisor/dashboard/dashboard.dart';
 import 'package:construction_manager_app/screens/supervisor/app_bar/app_bar.dart';
 import 'package:construction_manager_app/screens/supervisor/bottom_navigation/bottom_navigation.dart';
 import 'package:construction_manager_app/screens/supervisor/cusom_card/dashboard_card.dart';
@@ -262,16 +262,26 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
-      appBar: SupervisorAppBar(
-        supervisorName: defaultAppBarData.supervisorName,
-        supervisorRole: defaultAppBarData.supervisorRole,
-        profilePicPath: defaultAppBarData.profilePicPath,
-        hasNotifications: _showNotificationBar,
-        onNotificationPressed: _toggleNotificationBar,
-      ),
+      appBar:
+          _currentIndex == 0
+              ? SupervisorAppBar(
+                supervisorName: defaultAppBarData.supervisorName,
+                supervisorRole: defaultAppBarData.supervisorRole,
+                profilePicPath: defaultAppBarData.profilePicPath,
+                hasNotifications: _showNotificationBar,
+                notificationCount: defaultAppBarData.notificationCount,
+                isOnline: defaultAppBarData.isOnline,
+                onNotificationPressed: _toggleNotificationBar,
+                onProfilePressed: () {
+                  // Profile tap action - optional
+                  print('Profile tapped');
+                },
+              )
+              : null, // No AppBar for other tabs
       body: FadeTransition(
         opacity: _fadeAnimation,
         child: Column(

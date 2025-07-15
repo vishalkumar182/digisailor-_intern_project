@@ -1,6 +1,6 @@
 // lib/widgets/dashboard_card.dart
+import 'package:construction_manager_app/models/supervisor/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
-import 'package:construction_manager_app/models/supervisor/dashboard_model/dashboard.dart';
 
 class DashboardCardWidget extends StatelessWidget {
   final DashboardCard card;

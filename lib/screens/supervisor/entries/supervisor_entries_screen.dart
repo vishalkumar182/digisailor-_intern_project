@@ -44,28 +44,57 @@ class _SupervisorEntriesScreenState extends State<SupervisorEntriesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final horizontalPadding = screenWidth * 0.05;
+    final verticalPadding = screenHeight * 0.02;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF2F2F7),
+      resizeToAvoidBottomInset: true, // Future-proof for input fields
+      backgroundColor:
+          isDarkMode
+              ? CupertinoColors.black
+              : const Color(0xFFD3E0EA), // Darker background
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor:
+            isDarkMode ? CupertinoColors.darkBackgroundGray : Colors.white,
         elevation: 0,
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-        title: const Text(
+        systemOverlayStyle:
+            isDarkMode ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+        title: Text(
           'Entries',
-          style: TextStyle(
-            color: Colors.black87,
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+            fontSize: screenWidth * 0.05,
+            color: isDarkMode ? Colors.white : const Color(0xFF1C2526),
           ),
         ),
         centerTitle: true,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors:
+                  isDarkMode
+                      ? [const Color(0xFF2C2C2E), const Color(0xFF1C1C1E)]
+                      : [const Color(0xFFD3E0EA), const Color(0xFFB0C4DE)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+        ),
       ),
       body: Column(
         children: [
-          _buildCategorySelector(),
+          _buildCategorySelector(isDarkMode, screenWidth, screenHeight),
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.all(16),
+              physics: const ClampingScrollPhysics(),
+              padding: EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
+                vertical: verticalPadding,
+              ),
               itemCount: entries.length,
               itemBuilder: (context, index) {
                 final entry = entries[index];
@@ -73,7 +102,12 @@ class _SupervisorEntriesScreenState extends State<SupervisorEntriesScreen> {
                     entry['status'] != selectedCategory) {
                   return const SizedBox.shrink();
                 }
-                return _buildEntryCard(entry);
+                return _buildEntryCard(
+                  entry,
+                  isDarkMode,
+                  screenWidth,
+                  screenHeight,
+                );
               },
             ),
           ),
@@ -83,118 +117,245 @@ class _SupervisorEntriesScreenState extends State<SupervisorEntriesScreen> {
   }
 
   /// Category chips selector at top
-  Widget _buildCategorySelector() {
+  Widget _buildCategorySelector(
+    bool isDarkMode,
+    double screenWidth,
+    double screenHeight,
+  ) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      color: Colors.white,
+      padding: EdgeInsets.symmetric(
+        horizontal: screenWidth * 0.04,
+        vertical: screenHeight * 0.015,
+      ),
+      decoration: BoxDecoration(
+        color: isDarkMode ? const Color(0xFF1C2526) : const Color(0xFFE8ECEF),
+        border: Border.all(
+          color:
+              isDarkMode
+                  ? Colors.white.withOpacity(0.2)
+                  : const Color(0xFFCED4DA),
+          width: 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(isDarkMode ? 0.25 : 0.15),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+            spreadRadius: 2,
+          ),
+        ],
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children:
             categories.map((category) {
               final isSelected = category == selectedCategory;
-              return GestureDetector(
+              return _CategoryChip(
+                category: category,
+                isSelected: isSelected,
                 onTap: () {
-                  setState(() {
-                    selectedCategory = category;
-                  });
+                  HapticFeedback.lightImpact();
+                  setState(() => selectedCategory = category);
                 },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color:
-                        isSelected ? Colors.blueAccent : Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    category,
-                    style: TextStyle(
-                      color: isSelected ? Colors.white : Colors.black87,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
+                isDarkMode: isDarkMode,
+                screenWidth: screenWidth,
               );
             }).toList(),
       ),
     );
   }
 
+  /// Category chip widget
+  Widget _CategoryChip({
+    required String category,
+    required bool isSelected,
+    required VoidCallback onTap,
+    required bool isDarkMode,
+    required double screenWidth,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200), // Minimal animation
+        padding: EdgeInsets.symmetric(
+          horizontal: screenWidth * 0.04,
+          vertical: screenWidth * 0.02,
+        ),
+        decoration: BoxDecoration(
+          color:
+              isSelected
+                  ? const Color(0xFF007AFF)
+                  : (isDarkMode
+                      ? const Color(0xFF2C2C2E)
+                      : const Color(0xFFECEFF1)),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color:
+                isSelected
+                    ? const Color(0xFF007AFF)
+                    : (isDarkMode
+                        ? Colors.white.withOpacity(0.2)
+                        : const Color(0xFFCED4DA)),
+            width: 1.5,
+          ),
+          boxShadow:
+              isSelected
+                  ? [
+                    BoxShadow(
+                      color: const Color(
+                        0xFF007AFF,
+                      ).withOpacity(isDarkMode ? 0.3 : 0.2),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                      spreadRadius: 1,
+                    ),
+                  ]
+                  : [],
+        ),
+        child: Text(
+          category,
+          style: TextStyle(
+            color:
+                isSelected
+                    ? Colors.white
+                    : (isDarkMode ? Colors.white70 : const Color(0xFF1C2526)),
+            fontWeight: FontWeight.w600,
+            fontSize: screenWidth * 0.04,
+          ),
+        ),
+      ),
+    );
+  }
+
   /// Each entry card
-  Widget _buildEntryCard(Map<String, String> entry) {
+  Widget _buildEntryCard(
+    Map<String, String> entry,
+    bool isDarkMode,
+    double screenWidth,
+    double screenHeight,
+  ) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: EdgeInsets.only(bottom: screenHeight * 0.02),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDarkMode ? const Color(0xFF1C2526) : const Color(0xFFE8ECEF),
         borderRadius: BorderRadius.circular(16),
-        boxShadow: const [
-          BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2)),
+        border: Border.all(
+          color:
+              isDarkMode
+                  ? Colors.white.withOpacity(0.2)
+                  : const Color(0xFFCED4DA),
+          width: 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(isDarkMode ? 0.25 : 0.15),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+            spreadRadius: 2,
+          ),
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(screenWidth * 0.04),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               entry['project']!,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
+              style: TextStyle(
+                fontSize: screenWidth * 0.045,
+                fontWeight: FontWeight.w700,
+                color: isDarkMode ? Colors.white : const Color(0xFF1C2526),
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: screenHeight * 0.015),
             Row(
               children: [
                 Icon(
-                  CupertinoIcons.location,
-                  size: 16,
-                  color: Colors.grey.shade600,
+                  CupertinoIcons.location_solid,
+                  size: screenWidth * 0.045,
+                  color: isDarkMode ? Colors.white70 : const Color(0xFF5856D6),
                 ),
-                const SizedBox(width: 6),
+                SizedBox(width: screenWidth * 0.015),
                 Text(
                   entry['location']!,
-                  style: TextStyle(color: Colors.grey.shade800),
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.04,
+                    color:
+                        isDarkMode ? Colors.white70 : const Color(0xFF6B7280),
+                  ),
                 ),
                 const Spacer(),
                 Icon(
                   CupertinoIcons.calendar,
-                  size: 16,
-                  color: Colors.grey.shade600,
+                  size: screenWidth * 0.045,
+                  color: isDarkMode ? Colors.white70 : const Color(0xFFFF9500),
                 ),
-                const SizedBox(width: 6),
+                SizedBox(width: screenWidth * 0.015),
                 Text(
                   entry['date']!,
-                  style: TextStyle(color: Colors.grey.shade800),
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.04,
+                    color:
+                        isDarkMode ? Colors.white70 : const Color(0xFF6B7280),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: screenHeight * 0.015),
             Row(
               children: [
-                _buildInfoChip(Icons.groups, '${entry['employees']} employees'),
-                const SizedBox(width: 10),
-                _buildInfoChip(Icons.access_time, '${entry['hours']} hrs'),
+                _buildInfoChip(
+                  CupertinoIcons.person_2_fill,
+                  '${entry['employees']} employees',
+                  isDarkMode,
+                  screenWidth,
+                  const Color(0xFF007AFF),
+                ),
+                SizedBox(width: screenWidth * 0.025),
+                _buildInfoChip(
+                  CupertinoIcons.clock_fill,
+                  '${entry['hours']} hrs',
+                  isDarkMode,
+                  screenWidth,
+                  const Color(0xFF34C759),
+                ),
               ],
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: screenHeight * 0.015),
             Row(
               children: [
-                _buildStatusChip(entry['status']!),
+                _buildStatusChip(entry['status']!, isDarkMode, screenWidth),
                 const Spacer(),
                 CupertinoButton(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 6,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth * 0.04,
+                    vertical: screenWidth * 0.015,
                   ),
-                  color: Colors.blueAccent,
+                  color: const Color(0xFF007AFF),
                   borderRadius: BorderRadius.circular(14),
-                  child: const Text('View', style: TextStyle(fontSize: 14)),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        CupertinoIcons.eye,
+                        size: screenWidth * 0.04,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: screenWidth * 0.015),
+                      Text(
+                        'View',
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.035,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
                   onPressed: () {
+                    HapticFeedback.lightImpact();
                     // TODO: View details action
                   },
                 ),
@@ -207,23 +368,43 @@ class _SupervisorEntriesScreenState extends State<SupervisorEntriesScreen> {
   }
 
   /// Info chip widget (icon + text)
-  Widget _buildInfoChip(IconData icon, String text) {
+  Widget _buildInfoChip(
+    IconData icon,
+    String text,
+    bool isDarkMode,
+    double screenWidth,
+    Color iconColor,
+  ) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: EdgeInsets.symmetric(
+        horizontal: screenWidth * 0.03,
+        vertical: screenWidth * 0.015,
+      ),
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F0F5),
+        color: isDarkMode ? const Color(0xFF2C2C2E) : const Color(0xFFECEFF1),
         borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color:
+              isDarkMode
+                  ? Colors.white.withOpacity(0.2)
+                  : const Color(0xFFCED4DA),
+          width: 1,
+        ),
       ),
       child: Row(
         children: [
-          Icon(icon, size: 14, color: Colors.black54),
-          const SizedBox(width: 6),
+          Icon(
+            icon,
+            size: screenWidth * 0.035,
+            color: isDarkMode ? Colors.white70 : iconColor,
+          ),
+          SizedBox(width: screenWidth * 0.015),
           Text(
             text,
-            style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
-              color: Colors.black87,
+            style: TextStyle(
+              fontSize: screenWidth * 0.035,
+              fontWeight: FontWeight.w600,
+              color: isDarkMode ? Colors.white70 : const Color(0xFF1C2526),
             ),
           ),
         ],
@@ -232,31 +413,38 @@ class _SupervisorEntriesScreenState extends State<SupervisorEntriesScreen> {
   }
 
   /// Status chip widget (colored chip)
-  Widget _buildStatusChip(String status) {
+  Widget _buildStatusChip(String status, bool isDarkMode, double screenWidth) {
     Color chipColor;
     switch (status) {
       case 'Submitted':
-        chipColor = Colors.green;
+        chipColor = const Color(0xFF34C759);
         break;
       case 'Draft':
-        chipColor = Colors.orange;
+        chipColor = const Color(0xFFFF9500);
         break;
       default:
         chipColor = Colors.grey;
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: EdgeInsets.symmetric(
+        horizontal: screenWidth * 0.03,
+        vertical: screenWidth * 0.015,
+      ),
       decoration: BoxDecoration(
-        color: chipColor.withOpacity(0.15),
+        color: chipColor.withOpacity(isDarkMode ? 0.2 : 0.15),
         borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: chipColor.withOpacity(isDarkMode ? 0.4 : 0.3),
+          width: 1,
+        ),
       ),
       child: Text(
         status,
         style: TextStyle(
-          color: chipColor,
+          color: isDarkMode ? Colors.white70 : chipColor,
           fontWeight: FontWeight.w600,
-          fontSize: 13,
+          fontSize: screenWidth * 0.035,
         ),
       ),
     );

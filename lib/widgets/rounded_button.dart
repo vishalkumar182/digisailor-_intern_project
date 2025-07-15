@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class RoundedButton extends StatelessWidget {
   final String label;
@@ -12,39 +14,39 @@ class RoundedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF495057),
-          elevation: 4,
-          shadowColor: Colors.black.withOpacity(0.2),
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
-          ),
-        ).copyWith(
-          overlayColor: MaterialStateProperty.resolveWith<Color?>((
-            Set<MaterialState> states,
-          ) {
-            if (states.contains(MaterialState.pressed)) {
-              return Colors.black.withOpacity(
-                0.1,
-              ); // Apple-style press feedback
-            }
-            return null;
-          }),
-        ),
-        onPressed: onPressed,
-        child: Text(
-          label,
-          style: const TextStyle(
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    return CupertinoButton(
+      padding: EdgeInsets.symmetric(
+        horizontal: screenWidth * 0.04,
+        vertical: screenWidth * 0.015,
+      ),
+      color: const Color(0xFF007AFF),
+      borderRadius: BorderRadius.circular(14),
+      onPressed: () {
+        HapticFeedback.lightImpact();
+        onPressed();
+      },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            CupertinoIcons.checkmark_circle_fill,
+            size: screenWidth * 0.04,
             color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.3,
           ),
-        ),
+          SizedBox(width: screenWidth * 0.015),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: screenWidth * 0.035,
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
     );
   }
