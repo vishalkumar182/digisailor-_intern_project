@@ -36,7 +36,7 @@ class QuickActionsSection extends StatelessWidget {
           height:
               height ??
               55, // Breadth: Default height set to 60 (adjust this value as needed)
-          child: Container(
+          child: SizedBox(
             width: double.infinity,
             child: InkWell(
               onTap: () => onActionPressed(actions[0]),

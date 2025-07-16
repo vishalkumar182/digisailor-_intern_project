@@ -18,7 +18,7 @@ class AppleDropdown<T> extends StatefulWidget {
   final BoxDecoration dropdownDecoration;
 
   const AppleDropdown({
-    Key? key,
+    super.key,
     required this.items,
     required this.onChanged,
     required this.itemLabel,
@@ -32,7 +32,7 @@ class AppleDropdown<T> extends StatefulWidget {
     this.prefixIcon,
     this.enabled = true,
     required this.dropdownDecoration,
-  }) : super(key: key);
+  });
 
   @override
   State<AppleDropdown<T>> createState() => _AppleDropdownState<T>();
@@ -136,7 +136,7 @@ class _AppleDropdownState<T> extends State<AppleDropdown<T>>
                       child: Text(
                         widget.selectedItem == null
                             ? (widget.hint ?? 'Select an option')
-                            : widget.itemLabel(widget.selectedItem!),
+                            : widget.itemLabel(widget.selectedItem as T),
                         style:
                             widget.textStyle ??
                             TextStyle(
@@ -217,7 +217,7 @@ class _AppleDropdownState<T> extends State<AppleDropdown<T>>
                           shrinkWrap: true,
                           itemCount: widget.items.length,
                           separatorBuilder:
-                              (_, __) => Container(
+                              (_, _) => Container(
                                 height: 1,
                                 margin: const EdgeInsets.symmetric(
                                   horizontal: 8,

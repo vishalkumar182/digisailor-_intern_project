@@ -140,15 +140,13 @@ class EmployeeDetailScreen extends StatelessWidget {
                         _buildSection(
                           'Work History',
                           [
-                            ...workHistory
-                                .map<Widget>(
-                                  (history) => _buildWorkHistoryItem(
-                                    history,
-                                    isDarkMode,
-                                    screenWidth,
-                                  ),
-                                )
-                                .toList(),
+                            ...workHistory.map<Widget>(
+                              (history) => _buildWorkHistoryItem(
+                                history,
+                                isDarkMode,
+                                screenWidth,
+                              ),
+                            ),
                           ],
                           isDarkMode,
                           screenWidth,

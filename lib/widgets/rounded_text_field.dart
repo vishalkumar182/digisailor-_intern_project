@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RoundedTextField extends StatelessWidget {
@@ -11,7 +10,7 @@ class RoundedTextField extends StatelessWidget {
   final IconButton? suffixIcon;
 
   const RoundedTextField({
-    Key? key,
+    super.key,
     required this.hintText,
     required this.icon,
     required this.iconColor,
@@ -19,7 +18,7 @@ class RoundedTextField extends StatelessWidget {
     required this.keyboardType,
     this.obscureText = false,
     this.suffixIcon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

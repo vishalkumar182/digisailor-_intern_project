@@ -180,6 +180,7 @@ class _SupervisorEntriesScreenState extends State<SupervisorEntriesScreen> {
     );
   }
 
+  // ignore: non_constant_identifier_names
   Widget _CategoryChip({
     required String category,
     required bool isSelected,

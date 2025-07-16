@@ -11,6 +11,7 @@ class SupervisorProfileScreen extends StatefulWidget {
   const SupervisorProfileScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SupervisorProfileScreenState createState() =>
       _SupervisorProfileScreenState();
 }
@@ -429,7 +430,7 @@ class _SupervisorProfileScreenState extends State<SupervisorProfileScreen> {
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
-        // TODO: Add functionality later
+        //
       },
       child: Container(
         margin: EdgeInsets.only(bottom: screenWidth * 0.025),

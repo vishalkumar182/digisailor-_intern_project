@@ -1,16 +1,43 @@
-# construction_manager_app
+# Construction Manager App
 
-A new Flutter project.
+A mobile app for construction site supervisors to manage employees and track project progress.  
+Developed using Flutter & Dart as part of an internship at **Digisailor**.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## ✨ Features
 
-A few resources to get you started if this is your first Flutter project:
+- 👷 **Employee Management** – View & manage employee profiles
+- 📊 **Project Tracking** – Monitor ongoing tasks and project status
+- ⚡ **Quick Actions** – Add entries & access shortcuts from dashboard
+- 🖥️ **Supervisor Dashboard** – Simple, focused UI for supervisors
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🛠️ Tech Stack
+
+- **Framework**: Flutter 🧩
+- **Language**: Dart 🎯
+- **Native Modules**: C++, Swift, C ⚙️
+- **Build Tool**: CMake 🔨
+- **Other**: HTML (for embedded views) 🌐
+
+---
+
+## 📥 Installation
+
+> **Prerequisite**: [Install Flutter](https://docs.flutter.dev/get-started/install)
+
+```bash
+# Clone the repository
+git https://github.com/vishalkumar182/digisailor-_intern_project.git
+cd construction-manager-app
+
+# Install dependencies
+flutter pub get
+
+# Run the app
+flutter run
+
+
+```

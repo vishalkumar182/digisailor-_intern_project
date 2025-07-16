@@ -11,6 +11,7 @@ class EditAddress extends StatefulWidget {
   const EditAddress({super.key, required this.userData, required this.onSave});
 
   @override
+  // ignore: library_private_types_in_public_api
   _EditAddressState createState() => _EditAddressState();
 }
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 class AppleSubmitButton extends StatefulWidget {
   final VoidCallback onPressed;
@@ -14,7 +13,7 @@ class AppleSubmitButton extends StatefulWidget {
   final double? iconSize;
 
   const AppleSubmitButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.text,
     this.enabled = true,
@@ -25,7 +24,7 @@ class AppleSubmitButton extends StatefulWidget {
     required this.fontSize,
     this.icon,
     this.iconSize,
-  }) : super(key: key);
+  });
 
   @override
   State<AppleSubmitButton> createState() => _AppleSubmitButtonState();

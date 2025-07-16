@@ -439,8 +439,8 @@ class SupervisorDashboard extends StatefulWidget {
 /// State management for the supervisor dashboard
 class _SupervisorDashboardState extends State<SupervisorDashboard> {
   // Track notification state
-  bool _hasNotifications = true; // Default to true for unread state
-  int _notificationCount = 2; // Default to 2 unread notifications
+  final bool _hasNotifications = true; // Default to true for unread state
+  final int _notificationCount = 2; // Default to 2 unread notifications
 
   /// Handle notification button press
   /// This shows a message without clearing the badge

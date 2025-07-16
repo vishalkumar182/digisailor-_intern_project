@@ -91,7 +91,6 @@ class CustomLogoutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return CupertinoButton(
       padding: EdgeInsets.symmetric(
