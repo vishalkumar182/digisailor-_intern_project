@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 class QuickActionsSection extends StatelessWidget {
   final Function(String) onActionPressed;
   final List<String> actions;
+  final double? height;
 
   const QuickActionsSection({
     super.key,
     required this.onActionPressed,
     required this.actions,
+    this.height,
   });
 
   @override
@@ -17,7 +19,6 @@ class QuickActionsSection extends StatelessWidget {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,57 +32,70 @@ class QuickActionsSection extends StatelessWidget {
           ),
         ),
         SizedBox(height: screenWidth * 0.02),
-        Container(
-          width: double.infinity,
-          child: Card(
-            elevation: 0,
-            color:
-                isDarkMode ? const Color(0xFF2C2C2E) : const Color(0xFFE8ECEF),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-              side: BorderSide(
-                color:
-                    isDarkMode
-                        ? Colors.white.withOpacity(0.2)
-                        : const Color(0xFFCED4DA),
-                width: 1,
-              ),
-            ),
+        SizedBox(
+          height:
+              height ??
+              55, // Breadth: Default height set to 60 (adjust this value as needed)
+          child: Container(
+            width: double.infinity,
             child: InkWell(
               onTap: () => onActionPressed(actions[0]),
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(12),
               child: Container(
-                padding: EdgeInsets.all(screenWidth * 0.04),
+                padding: EdgeInsets.all(
+                  screenWidth * 0.03,
+                ), // Padding for internal spacing
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors:
-                        isDarkMode
-                            ? [const Color(0xFF3A3A3C), const Color(0xFF2C2C2E)]
-                            : [
-                              const Color(0xFFF7F9FC),
-                              const Color(0xFFE8ECEF),
-                            ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(15),
+                  color:
+                      isDarkMode
+                          ? const Color(0xFF2C2C2E)
+                          : const Color(0xFFFF9500),
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color:
+                          isDarkMode
+                              ? Colors.black.withOpacity(0.4)
+                              : const Color(0xFFFF9500).withOpacity(0.5),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      CupertinoIcons.add_circled,
-                      size: screenWidth * 0.08,
-                      color: const Color(0xFF007AFF),
+                    Container(
+                      padding: const EdgeInsets.all(
+                        8,
+                      ), // Padding for icon circle
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFF9500),
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFFFF9500).withOpacity(0.6),
+                            blurRadius: 6,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        CupertinoIcons.add_circled,
+                        size: screenWidth * 0.08, // Icon size
+                        color: Colors.white,
+                      ),
                     ),
-                    SizedBox(width: screenWidth * 0.03),
+                    SizedBox(
+                      width: screenWidth * 0.03,
+                    ), // Spacing between icon and text
                     Text(
                       'Add Entry',
                       style: TextStyle(
-                        fontSize: screenWidth * 0.045,
-                        fontWeight: FontWeight.w600,
-                        color:
-                            isDarkMode ? Colors.white : const Color(0xFF1C2526),
+                        fontSize: screenWidth * 0.055, // Text font size
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                        letterSpacing: 1.0,
                       ),
                     ),
                   ],

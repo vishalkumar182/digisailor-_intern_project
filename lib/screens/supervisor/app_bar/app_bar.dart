@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:construction_manager_app/screens/supervisor/profiles/profile_screen.dart'; // For navigation
 
 /// Modern iOS-style app bar for supervisor dashboard with enhanced UX
 ///
@@ -46,8 +47,8 @@ class SupervisorAppBar extends StatefulWidget implements PreferredSizeWidget {
     required this.supervisorName,
     required this.supervisorRole,
     required this.profilePicPath,
-    this.hasNotifications = false,
-    this.notificationCount = 0,
+    this.hasNotifications = true, // Default to true for unread state
+    this.notificationCount = 2, // Default to 2 unread notifications
     required this.onNotificationPressed,
     this.onProfilePressed,
     this.toolbarHeight =
@@ -70,9 +71,6 @@ class _SupervisorAppBarState extends State<SupervisorAppBar>
 
   /// Scale animation for touch feedback
   late Animation<double> _scaleAnimation;
-
-  /// Track if profile section is currently being pressed
-  bool _isPressed = false;
 
   @override
   void initState() {
@@ -122,6 +120,7 @@ class _SupervisorAppBarState extends State<SupervisorAppBar>
         color: const Color(0xFFFBFBFD), // iOS-style light background
         border: Border(
           bottom: BorderSide(
+            // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.08), // Subtle separator line
             width: 0.5,
           ),
@@ -134,7 +133,7 @@ class _SupervisorAppBarState extends State<SupervisorAppBar>
             children: [
               _buildUserProfile(), // Left side: user profile
               const Spacer(), // Push action buttons to the right
-              _buildActionButtons(), // Right side: notifications and menu
+              _buildActionButtons(), // Right side: notifications
             ],
           ),
         ),
@@ -142,26 +141,26 @@ class _SupervisorAppBarState extends State<SupervisorAppBar>
     );
   }
 
-  /// Builds the user profile section with tap animation
+  /// Builds the user profile section with tap animation and navigation
   Widget _buildUserProfile() {
     return GestureDetector(
       // Handle touch down - start press animation
       onTapDown: (_) {
-        setState(() => _isPressed = true);
         _animationController.forward();
         HapticFeedback.lightImpact(); // Provide haptic feedback
       },
-      // Handle touch up - complete press action
+      // Handle touch up - navigate to profile
       onTapUp: (_) {
-        setState(() => _isPressed = false);
         _animationController.reverse();
-        if (widget.onProfilePressed != null) {
-          widget.onProfilePressed!();
-        }
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SupervisorProfileScreen(),
+          ),
+        );
       },
       // Handle touch cancel - reset animation
       onTapCancel: () {
-        setState(() => _isPressed = false);
         _animationController.reverse();
       },
       child: AnimatedBuilder(
@@ -198,6 +197,7 @@ class _SupervisorAppBarState extends State<SupervisorAppBar>
             ),
             boxShadow: [
               BoxShadow(
+                // ignore: deprecated_member_use
                 color: Colors.black.withOpacity(0.1),
                 blurRadius: 8,
                 offset: const Offset(0, 2), // Subtle drop shadow
@@ -285,15 +285,9 @@ class _SupervisorAppBarState extends State<SupervisorAppBar>
     );
   }
 
-  /// Builds the action buttons section (notifications and menu)
+  /// Builds the action buttons section (notifications only)
   Widget _buildActionButtons() {
-    return Row(
-      children: [
-        _buildNotificationButton(),
-        const SizedBox(width: 4),
-        _buildMenuButton(),
-      ],
-    );
+    return Row(children: [_buildNotificationButton()]);
   }
 
   /// Builds the notification button with badge
@@ -303,7 +297,7 @@ class _SupervisorAppBarState extends State<SupervisorAppBar>
         GestureDetector(
           onTap: () {
             HapticFeedback.lightImpact(); // Provide haptic feedback
-            widget.onNotificationPressed();
+            _showNotificationMessage(context);
           },
           child: Container(
             width: 40,
@@ -312,6 +306,7 @@ class _SupervisorAppBarState extends State<SupervisorAppBar>
               // Highlight background when there are notifications
               color:
                   widget.hasNotifications
+                      // ignore: deprecated_member_use
                       ? const Color(0xFF007AFF).withOpacity(
                         0.1,
                       ) // iOS blue tint
@@ -331,15 +326,15 @@ class _SupervisorAppBarState extends State<SupervisorAppBar>
             ),
           ),
         ),
-        // Notification badge (only show if there are notifications)
-        if (widget.hasNotifications && widget.notificationCount > 0)
+        // Notification badge (always show red if notificationCount > 0)
+        if (widget.notificationCount > 0)
           Positioned(
             right: 6,
             top: 6,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: const Color(0xFFFF3B30), // iOS red
+                color: const Color(0xFFFF3B30), // Permanent red badge
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: Colors.white, width: 1),
               ),
@@ -363,26 +358,28 @@ class _SupervisorAppBarState extends State<SupervisorAppBar>
     );
   }
 
-  /// Builds the menu button for additional actions
-  Widget _buildMenuButton() {
-    return GestureDetector(
-      onTap: () {
-        HapticFeedback.lightImpact(); // Provide haptic feedback
-        // Handle menu action - could show bottom sheet or navigate
+  /// Shows a notification message at the top using AlertDialog
+  void _showNotificationMessage(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Notifications'),
+          content: Text('Notifications: ${widget.notificationCount} unread'),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+          backgroundColor: const Color(0xFFF2F2F7), // iOS light background
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(13),
+          ),
+        );
       },
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: const BoxDecoration(
-          color: Colors.transparent,
-          shape: BoxShape.circle,
-        ),
-        child: const Icon(
-          Icons.more_horiz_rounded,
-          size: 22,
-          color: Color(0xFF8E8E93), // iOS secondary color
-        ),
-      ),
     );
   }
 }
@@ -412,7 +409,7 @@ class AppBarData {
     required this.supervisorRole,
     required this.profilePicPath,
     this.isOnline = true,
-    this.notificationCount = 0,
+    this.notificationCount = 2, // Default to 2 unread notifications
   });
 }
 
@@ -425,7 +422,7 @@ const defaultAppBarData = AppBarData(
   supervisorRole: 'Senior Site Supervisor',
   profilePicPath: 'assets/icons/profile.png',
   isOnline: true,
-  notificationCount: 3,
+  notificationCount: 2, // Default to show 2 unread notifications
 );
 
 /// Example usage widget demonstrating how to implement the SupervisorAppBar
@@ -442,34 +439,27 @@ class SupervisorDashboard extends StatefulWidget {
 /// State management for the supervisor dashboard
 class _SupervisorDashboardState extends State<SupervisorDashboard> {
   // Track notification state
-  bool _hasNotifications = true;
-  int _notificationCount = 5;
+  bool _hasNotifications = true; // Default to true for unread state
+  int _notificationCount = 2; // Default to 2 unread notifications
 
   /// Handle notification button press
-  /// This would typically navigate to a notifications screen
-  /// or show a notification panel
+  /// This shows a message without clearing the badge
   void _handleNotificationPressed() {
-    setState(() {
-      _hasNotifications = false;
-      _notificationCount = 0;
-    });
-
-    // In a real app, you might:
-    // - Navigate to notifications screen
-    // - Show notification bottom sheet
-    // - Mark notifications as read
-    // - Update backend state
+    _showNotificationMessage(context);
   }
 
   /// Handle profile section press
-  /// This would typically navigate to a profile screen
-  /// or show profile options
+  /// This navigates to the profile screen
   void _handleProfilePressed() {
-    // In a real app, you might:
-    // - Navigate to profile screen
-    // - Show profile options bottom sheet
-    // - Show user settings
-    print('Profile pressed - navigate to profile screen');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SupervisorProfileScreen()),
+    );
+  }
+
+  /// Shows a temporary notification message on tap (placeholder, moved to app bar)
+  void _showNotificationMessage(BuildContext context) {
+    // This is now handled in _SupervisorAppBarState
   }
 
   @override

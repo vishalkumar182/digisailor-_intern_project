@@ -23,19 +23,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.light().copyWith(
         scaffoldBackgroundColor: Colors.transparent,
         primaryColor: const Color(0xFF007AFF),
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           headlineMedium: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w700,
-            color: const Color(0xFF1C2526),
+            color: Color(0xFF1C2526),
           ),
-          bodyMedium: TextStyle(fontSize: 16, color: const Color(0xFF1C2526)),
-          bodySmall: TextStyle(fontSize: 14, color: const Color(0xFF6B7280)),
+          bodyMedium: TextStyle(fontSize: 16, color: Color(0xFF1C2526)),
+          bodySmall: TextStyle(fontSize: 14, color: Color(0xFF6B7280)),
         ),
-        cupertinoOverrideTheme: CupertinoThemeData(
-          primaryColor: const Color(0xFF007AFF),
+        cupertinoOverrideTheme: const CupertinoThemeData(
+          primaryColor: Color(0xFF007AFF),
           textTheme: CupertinoTextThemeData(
-            textStyle: TextStyle(fontSize: 16, color: const Color(0xFF1C2526)),
+            textStyle: TextStyle(fontSize: 16, color: Color(0xFF1C2526)),
           ),
         ),
       ),

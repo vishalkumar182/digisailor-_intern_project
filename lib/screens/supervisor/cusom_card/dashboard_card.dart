@@ -1,4 +1,3 @@
-// lib/widgets/dashboard_card.dart
 import 'package:construction_manager_app/models/supervisor/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
@@ -31,11 +30,13 @@ class DashboardCardWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(18),
               boxShadow: [
                 BoxShadow(
+                  // ignore: deprecated_member_use
                   color: Colors.black.withOpacity(0.03),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
                 BoxShadow(
+                  // ignore: deprecated_member_use
                   color: Colors.black.withOpacity(0.02),
                   blurRadius: 2,
                   offset: const Offset(0, 1),
@@ -50,6 +51,8 @@ class DashboardCardWidget extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
+                        // ignore: duplicate_ignore
+                        // ignore: deprecated_member_use
                         color: card.color.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -119,6 +122,7 @@ class DashboardCardsRow extends StatelessWidget {
     super.key,
     required this.cards,
     required this.onCardTap,
+    required double height,
   });
 
   @override

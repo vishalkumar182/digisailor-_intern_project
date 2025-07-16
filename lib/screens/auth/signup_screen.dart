@@ -1,8 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:construction_manager_app/widgets/animated_heading.dart';
-import 'package:construction_manager_app/widgets/rounded_text_field.dart';
-import 'package:construction_manager_app/widgets/rounded_button.dart';
-
 /*
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});

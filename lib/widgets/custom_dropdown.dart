@@ -297,6 +297,7 @@ class _DropdownItemState extends State<_DropdownItem> {
                 : const Color(0xFF007AFF).withOpacity(0.1))
             : (_isHovered
                 ? (widget.isDark
+                    // ignore: deprecated_member_use
                     ? Colors.white.withOpacity(0.05)
                     : Colors.black.withOpacity(0.03))
                 : Colors.transparent);
@@ -349,7 +350,6 @@ class _DropdownItemState extends State<_DropdownItem> {
 }
 
 class _NoGlowScrollBehavior extends ScrollBehavior {
-  @override
   Widget buildViewportChrome(
     BuildContext context,
     Widget child,

@@ -227,7 +227,7 @@ class _SupervisorProfileScreenState extends State<SupervisorProfileScreen> {
                 backgroundImage:
                     userData['photo']?.isNotEmpty == true
                         ? FileImage(File(userData['photo']!))
-                        : const AssetImage('assets/images/user.png')
+                        : const AssetImage('assets/icons/profile.png')
                             as ImageProvider,
                 backgroundColor:
                     isDarkMode

@@ -1,13 +1,16 @@
 import 'package:construction_manager_app/models/supervisor/dashboard/dashboard.dart';
 import 'package:construction_manager_app/screens/supervisor/app_bar/app_bar.dart';
 import 'package:construction_manager_app/screens/supervisor/bottom_navigation/bottom_navigation.dart';
+import 'package:construction_manager_app/screens/supervisor/card_detail_data.dart/card1_detail.dart';
 import 'package:construction_manager_app/screens/supervisor/cusom_card/dashboard_card.dart';
 import 'package:construction_manager_app/screens/supervisor/dashboard/dashboard_data.dart';
+
+import 'package:construction_manager_app/screens/supervisor/dashboard/project_detail_page.dart';
 import 'package:construction_manager_app/screens/supervisor/entries/supervisor_entries_screen.dart';
 import 'package:construction_manager_app/screens/supervisor/quick_action/quick_actions.dart';
+import 'package:construction_manager_app/screens/supervisor/timesheet/add_entry.dart';
 import 'package:construction_manager_app/screens/supervisor/welcome_card/welcome_card.dart';
 import 'package:construction_manager_app/screens/supervisor/profiles/profile_screen.dart';
-// Added import
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -29,7 +32,7 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
   late Animation<double> _slideAnimation;
   late Animation<double> _fadeAnimation;
 
-  // Use data from DashboardData
+  // Current project information
   final String currentProject = DashboardData.currentProject;
   final List<DashboardCard> _dashboardCards = DashboardData.dashboardCards;
 
@@ -103,32 +106,50 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
 
   /// Builds the home tab content with dashboard widgets
   Widget _buildHomeContent() {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          WelcomeCard(
-            supervisorName: defaultAppBarData.supervisorName,
-            currentProject: currentProject,
+    return Builder(
+      builder:
+          (context) => SingleChildScrollView(
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () => _handleProjectTap(context),
+                  child: WelcomeCard(
+                    supervisorName: defaultAppBarData.supervisorName,
+                    currentProject: currentProject,
+                  ),
+                ),
+                DashboardCardsRow(
+                  cards: _dashboardCards,
+                  onCardTap: (card) => _handleCardTap(context, card),
+                  height: 12,
+                ),
+                const SizedBox(height: 20),
+                QuickActionsSection(
+                  onActionPressed: _handleQuickAction,
+                  actions: ['Add Entry'],
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
-          DashboardCardsRow(cards: _dashboardCards, onCardTap: _handleCardTap),
-          const SizedBox(height: 20),
-          QuickActionsSection(
-            onActionPressed: _handleQuickAction,
-            actions: ['Add Entry'], // Single action
-          ),
-          const SizedBox(height: 20),
-        ],
+    );
+  }
+
+  /// Handles dashboard card tap events with proper context
+  void _handleCardTap(BuildContext context, DashboardCard card) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DashboardDetailPage(title: card.title),
       ),
     );
   }
 
-  /// Handles dashboard card tap events
-  void _handleCardTap(DashboardCard card) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Opening ${card.title} details...'),
-        duration: const Duration(seconds: 2),
-      ),
+  /// Handles project welcome card tap
+  void _handleProjectTap(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ProjectDetailPage()),
     );
   }
 
@@ -139,9 +160,7 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder:
-              (context) =>
-                  const SupervisorEntriesScreen(), // Placeholder for add entry screen
+          builder: (context) => const TimesheetForm(title: 'Add Entry'),
         ),
       );
     } else {
@@ -156,12 +175,14 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
 
   /// Builds the sliding notification bar widget
   Widget _buildNotificationBar() {
+    final screenWidth = MediaQuery.of(context).size.width;
     return AnimatedBuilder(
       animation: _slideAnimation,
       builder: (context, child) {
         return Transform.translate(
           offset: Offset(0, _slideAnimation.value),
           child: Container(
+            width: screenWidth - 32,
             margin: const EdgeInsets.fromLTRB(16, 12, 16, 8),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -188,10 +209,10 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
                     color: const Color(0xFF007AFF).withOpacity(0.2),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
+                  child: const Icon(
                     Icons.campaign,
                     size: 20,
-                    color: const Color(0xFF007AFF),
+                    color: Color(0xFF007AFF),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -199,12 +220,12 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Safety Update',
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: const Color(0xFF007AFF),
+                          color: Color(0xFF007AFF),
                         ),
                       ),
                       const SizedBox(height: 2),
@@ -228,10 +249,10 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
                       color: Colors.white,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.close,
                       size: 16,
-                      color: Colors.grey.shade600,
+                      color: Colors.grey,
                     ),
                   ),
                 ),
@@ -246,7 +267,7 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.grey.shade50,
       appBar:
           _currentIndex == 0
               ? SupervisorAppBar(
@@ -258,29 +279,16 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
                 isOnline: defaultAppBarData.isOnline,
                 onNotificationPressed: _toggleNotificationBar,
                 onProfilePressed: () {
-                  print('Profile tapped');
+                  _handleProfilePressed();
                 },
               )
               : null,
       body: FadeTransition(
         opacity: _fadeAnimation,
-        child: Stack(
+        child: Column(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [const Color(0xFFD3E0EA), const Color(0xFFB0C4DE)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-            ),
-            Column(
-              children: [
-                if (_showNotificationBar) _buildNotificationBar(),
-                Expanded(child: _buildMainContent()),
-              ],
-            ),
+            if (_showNotificationBar) _buildNotificationBar(),
+            Expanded(child: _buildMainContent()),
           ],
         ),
       ),
@@ -305,6 +313,14 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
           ),
         ],
       ),
+    );
+  }
+
+  /// Handle profile section press
+  void _handleProfilePressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SupervisorProfileScreen()),
     );
   }
 }
