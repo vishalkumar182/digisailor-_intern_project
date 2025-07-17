@@ -47,8 +47,6 @@ flutter run
 
 ---
 ## 🔒 License
-
-<<<<<<< HEAD
 © 2025 Digisailor. All rights reserved.
 This project is **proprietary and confidential**.
 =======
@@ -59,5 +57,5 @@ Unauthorized use, distribution, or modification of this software is strictly pro
 
 👥 Contributors
 Vishal Kumar – Intern at Digisailor 🙌
-<<<<<<< HEAD
+
 
