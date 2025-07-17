@@ -60,6 +60,4 @@ Unauthorized use, distribution, or modification of this software is strictly pro
 👥 Contributors
 Vishal Kumar – Intern at Digisailor 🙌
 <<<<<<< HEAD
-```
-=======
->>>>>>> 8393824c48c53ddbc6685c0dd0b82d717c3259ce
+
