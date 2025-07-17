@@ -7,20 +7,27 @@ Built using **Flutter** and **Dart** during an internship at **Digisailor**.
 
 ## ✨ Features
 
+<<<<<<< HEAD
 - 👷‍♂️ **Employee Management** — View and manage employee profiles
 - 📊 **Project Tracking** — Monitor active tasks and site progress
 - ⚡ **Quick Actions** — Instantly add entries from the dashboard
 - 🖥️ **Supervisor Dashboard** — Clean UI designed for field efficiency
+=======
+- 👷‍♂️ **Employee Management** — View and manage employee profiles  
+- 📊 **Project Tracking** — Monitor active tasks and site progress  
+- ⚡ **Quick Actions** — Instantly add entries from the dashboard  
+- 🖥️ **Supervisor Dashboard** — Clean UI designed for field efficiency  
+>>>>>>> 8393824c48c53ddbc6685c0dd0b82d717c3259ce
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Flutter 🧩
-- **Language**: Dart 🎯
-- **Native Modules**: C++, Swift, C ⚙️
-- **Build Tool**: CMake 🔨
-- **Other**: HTML (for embedded views) 🌐
+- **Framework**: Flutter 🧩  
+- **Language**: Dart 🎯  
+- **Native Modules**: C++, Swift, C ⚙️  
+- **Build Tool**: CMake 🔨  
+- **Other**: HTML (for embedded views) 🌐 
 
 ---
 
@@ -42,10 +49,18 @@ flutter run
 ---
 ## 🔒 License
 
+<<<<<<< HEAD
 © 2025 Digisailor. All rights reserved.
 This project is **proprietary and confidential**.
+=======
+© 2025 Digisailor. All rights reserved.  
+This project is **proprietary and confidential**.  
+>>>>>>> 8393824c48c53ddbc6685c0dd0b82d717c3259ce
 Unauthorized use, distribution, or modification of this software is strictly prohibited.
 
 👥 Contributors
 Vishal Kumar – Intern at Digisailor 🙌
+<<<<<<< HEAD
 ```
+=======
+>>>>>>> 8393824c48c53ddbc6685c0dd0b82d717c3259ce
