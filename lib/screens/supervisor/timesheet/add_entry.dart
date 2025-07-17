@@ -35,7 +35,7 @@ class _TimesheetFormState extends State<TimesheetForm> {
   void initState() {
     super.initState();
     _remarksFocusNode.addListener(() {
-      setState(() {}); // Rebuild to update border when focus changes
+      setState(() {});
     });
   }
 
@@ -46,19 +46,17 @@ class _TimesheetFormState extends State<TimesheetForm> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final horizontalPadding = screenWidth * 0.05;
-    final verticalPadding = screenHeight * 0.025; // Reduced for compactness
+    final verticalPadding = screenHeight * 0.025;
 
     return Scaffold(
-      resizeToAvoidBottomInset: true, // Adjust for keyboard
+      resizeToAvoidBottomInset: true,
       backgroundColor:
-          isDarkMode
-              ? CupertinoColors.black
-              : const Color(0xFFD3E0EA), // Darker background
+          isDarkMode ? CupertinoColors.black : const Color(0xFFD3E0EA),
       appBar: AppBar(
         title: Text(
           widget.title,
           style: theme.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.w700, // Bolder for visibility
+            fontWeight: FontWeight.w700,
             fontSize: screenWidth * 0.05,
             color: isDarkMode ? Colors.white : const Color(0xFF1C2526),
           ),
@@ -74,10 +72,7 @@ class _TimesheetFormState extends State<TimesheetForm> {
               colors:
                   isDarkMode
                       ? [const Color(0xFF2C2C2E), const Color(0xFF1C1C1E)]
-                      : [
-                        const Color(0xFFD3E0EA),
-                        const Color(0xFFB0C4DE),
-                      ], // Darker gradient
+                      : [const Color(0xFFD3E0EA), const Color(0xFFB0C4DE)],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
@@ -86,25 +81,21 @@ class _TimesheetFormState extends State<TimesheetForm> {
       ),
       body: AnimationLimiter(
         child: SingleChildScrollView(
-          physics: const ClampingScrollPhysics(), // Prevent overscrolling
+          physics: const ClampingScrollPhysics(),
           padding: EdgeInsets.only(
             left: horizontalPadding,
             right: horizontalPadding,
             top: verticalPadding,
-            bottom:
-                MediaQuery.of(context).viewInsets.bottom +
-                verticalPadding, // Keyboard fix
+            bottom: MediaQuery.of(context).viewInsets.bottom + verticalPadding,
           ),
           child: Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
-            elevation: 10, // Stronger shadow
+            elevation: 10,
             shadowColor: Colors.black.withOpacity(0.3),
             color:
-                isDarkMode
-                    ? const Color(0xFF1C2526)
-                    : const Color(0xFFE8ECEF), // Darker card
+                isDarkMode ? const Color(0xFF1C2526) : const Color(0xFFE8ECEF),
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
@@ -112,10 +103,7 @@ class _TimesheetFormState extends State<TimesheetForm> {
                   colors:
                       isDarkMode
                           ? [const Color(0xFF1C2526), const Color(0xFF2C2C2E)]
-                          : [
-                            const Color(0xFFE8ECEF),
-                            const Color(0xFFDDE4E8),
-                          ], // Subtle gradient
+                          : [const Color(0xFFE8ECEF), const Color(0xFFDDE4E8)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -131,11 +119,10 @@ class _TimesheetFormState extends State<TimesheetForm> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Page Title
                           Text(
                             "Timesheet Entry",
                             style: theme.textTheme.headlineSmall?.copyWith(
-                              fontWeight: FontWeight.w700, // Bolder
+                              fontWeight: FontWeight.w700,
                               fontSize: screenWidth * 0.07,
                               color:
                                   isDarkMode
@@ -145,7 +132,6 @@ class _TimesheetFormState extends State<TimesheetForm> {
                           ),
                           SizedBox(height: verticalPadding),
 
-                          // DROPDOWN SECTIONS
                           _buildSection(
                             icon: CupertinoIcons.location_solid,
                             label: "Location",
@@ -158,8 +144,8 @@ class _TimesheetFormState extends State<TimesheetForm> {
                                 color:
                                     isDarkMode
                                         ? Colors.white70
-                                        : const Color(0xFF5856D6), // Purple
-                                size: screenWidth * 0.065,
+                                        : const Color(0xFF5856D6),
+                                size: screenWidth * 0.055,
                               ),
                             ),
                             isDarkMode: isDarkMode,
@@ -178,8 +164,8 @@ class _TimesheetFormState extends State<TimesheetForm> {
                                 color:
                                     isDarkMode
                                         ? Colors.white70
-                                        : const Color(0xFFFF9500), // Orange
-                                size: screenWidth * 0.065,
+                                        : const Color(0xFFFF9500),
+                                size: screenWidth * 0.055,
                               ),
                             ),
                             isDarkMode: isDarkMode,
@@ -199,8 +185,8 @@ class _TimesheetFormState extends State<TimesheetForm> {
                                 color:
                                     isDarkMode
                                         ? Colors.white70
-                                        : const Color(0xFF007AFF), // Blue
-                                size: screenWidth * 0.065,
+                                        : const Color(0xFF007AFF),
+                                size: screenWidth * 0.055,
                               ),
                             ),
                             isDarkMode: isDarkMode,
@@ -219,8 +205,8 @@ class _TimesheetFormState extends State<TimesheetForm> {
                                 color:
                                     isDarkMode
                                         ? Colors.white70
-                                        : const Color(0xFF34C759), // Green
-                                size: screenWidth * 0.065,
+                                        : const Color(0xFF34C759),
+                                size: screenWidth * 0.055,
                               ),
                             ),
                             isDarkMode: isDarkMode,
@@ -228,14 +214,13 @@ class _TimesheetFormState extends State<TimesheetForm> {
 
                           Divider(
                             height: verticalPadding * 2,
-                            thickness: 1.5, // Bolder divider
+                            thickness: 1.5,
                             color:
                                 isDarkMode
                                     ? Colors.white.withOpacity(0.2)
                                     : const Color(0xFFCED4DA),
                           ),
 
-                          // SITE TIMINGS
                           _buildSectionTitle(
                             "Site Timings",
                             isDarkMode,
@@ -254,7 +239,7 @@ class _TimesheetFormState extends State<TimesheetForm> {
                             (t) => setState(() => _signInTime = t),
                             isDarkMode,
                             screenWidth,
-                            accentColor: const Color(0xFFFF9500), // Orange
+                            accentColor: const Color(0xFFFF9500),
                           ),
                           _buildTimingRow(
                             "Break Start",
@@ -307,7 +292,6 @@ class _TimesheetFormState extends State<TimesheetForm> {
 
                           SizedBox(height: verticalPadding * 1.5),
 
-                          // REMARKS SECTION
                           _buildSectionTitle(
                             "Remarks",
                             isDarkMode,
@@ -324,14 +308,13 @@ class _TimesheetFormState extends State<TimesheetForm> {
                             child: TextField(
                               controller: _remarksController,
                               focusNode: _remarksFocusNode,
-                              maxLines: 5, // Increased for more space
+                              maxLines: 5,
                               style: TextStyle(
                                 color:
                                     isDarkMode
                                         ? Colors.white
                                         : const Color(0xFF1C2526),
-                                fontSize:
-                                    screenWidth * 0.042, // Slightly larger
+                                fontSize: screenWidth * 0.042,
                                 fontWeight: FontWeight.w500,
                               ),
                               decoration: InputDecoration(
@@ -347,9 +330,7 @@ class _TimesheetFormState extends State<TimesheetForm> {
                                 fillColor:
                                     isDarkMode
                                         ? const Color(0xFF2C2C2E)
-                                        : const Color(
-                                          0xFFECEFF1,
-                                        ), // Darker fill
+                                        : const Color(0xFFECEFF1),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(16),
                                   borderSide: BorderSide.none,
@@ -375,19 +356,18 @@ class _TimesheetFormState extends State<TimesheetForm> {
                                   vertical: screenWidth * 0.04,
                                   horizontal: screenWidth * 0.04,
                                 ),
-                                prefixIcon: null, // Removed pencil icon
+                                prefixIcon: null,
                               ),
                             ),
                           ),
 
                           SizedBox(height: verticalPadding * 2),
 
-                          // SUBMIT BUTTON
                           AppleSubmitButton(
                             onPressed: _submitForm,
                             text: "Submit Timesheet",
                             enabled: true,
-                            backgroundColor: const Color(0xFF34C759), // Green
+                            backgroundColor: const Color(0xFF34C759),
                             textColor: Colors.white,
                             borderRadius: 16,
                             height: screenWidth * 0.14,
@@ -408,7 +388,6 @@ class _TimesheetFormState extends State<TimesheetForm> {
     );
   }
 
-  // Section Wrapper
   Widget _buildSection({
     required IconData icon,
     required String label,
@@ -429,7 +408,7 @@ class _TimesheetFormState extends State<TimesheetForm> {
                 children: [
                   Icon(
                     icon,
-                    size: screenWidth * 0.065,
+                    size: screenWidth * 0.055,
                     color:
                         isDarkMode ? Colors.white70 : const Color(0xFF007AFF),
                   ),
@@ -437,7 +416,7 @@ class _TimesheetFormState extends State<TimesheetForm> {
                   Text(
                     label,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700, // Bolder
+                      fontWeight: FontWeight.w700,
                       fontSize: screenWidth * 0.045,
                       color:
                           isDarkMode ? Colors.white : const Color(0xFF1C2526),
@@ -445,9 +424,7 @@ class _TimesheetFormState extends State<TimesheetForm> {
                   ),
                 ],
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.015,
-              ), // Reduced
+              SizedBox(height: MediaQuery.of(context).size.height * 0.015),
               child,
             ],
           ),
@@ -456,7 +433,6 @@ class _TimesheetFormState extends State<TimesheetForm> {
     );
   }
 
-  // Section Title
   Widget _buildSectionTitle(String title, bool isDarkMode, double screenWidth) {
     return AnimationConfiguration.staggeredList(
       position: 0,
@@ -467,7 +443,7 @@ class _TimesheetFormState extends State<TimesheetForm> {
           child: Text(
             title,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w700, // Bolder
+              fontWeight: FontWeight.w700,
               fontSize: screenWidth * 0.06,
               color: isDarkMode ? Colors.white : const Color(0xFF1C2526),
             ),
@@ -477,7 +453,6 @@ class _TimesheetFormState extends State<TimesheetForm> {
     );
   }
 
-  // Subtitle
   Widget _buildSubTitle(String subtitle, bool isDarkMode, double screenWidth) {
     return AnimationConfiguration.staggeredList(
       position: 0,
@@ -486,13 +461,11 @@ class _TimesheetFormState extends State<TimesheetForm> {
         verticalOffset: 20.0,
         child: FadeInAnimation(
           child: Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: screenWidth * 0.025,
-            ), // Reduced
+            padding: EdgeInsets.symmetric(vertical: screenWidth * 0.025),
             child: Text(
               subtitle,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700, // Bolder
+                fontWeight: FontWeight.w700,
                 fontSize: screenWidth * 0.05,
                 color: isDarkMode ? Colors.white70 : const Color(0xFF1C2526),
               ),
@@ -503,7 +476,6 @@ class _TimesheetFormState extends State<TimesheetForm> {
     );
   }
 
-  // Custom Dropdown Builder
   Widget _buildDropdown(
     String? Function() getValue,
     void Function(String?) onChanged,
@@ -527,7 +499,7 @@ class _TimesheetFormState extends State<TimesheetForm> {
               canvasColor:
                   isDarkMode
                       ? const Color(0xFF2C2C2E)
-                      : const Color(0xFFECEFF1), // Darker
+                      : const Color(0xFFECEFF1),
             ),
             child: AppleDropdown<String>(
               items: items.map((e) => e['value']!).toList(),
@@ -536,36 +508,43 @@ class _TimesheetFormState extends State<TimesheetForm> {
               itemLabel:
                   (val) => items.firstWhere((e) => e['value'] == val)['label']!,
               dropdownDecoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color:
-                    isDarkMode
-                        ? const Color(0xFF2C2C2E)
-                        : const Color(0xFFECEFF1), // Darker
+                borderRadius: BorderRadius.circular(12),
+                gradient: LinearGradient(
+                  colors:
+                      isDarkMode
+                          ? [const Color(0xFF2C2C2E), const Color(0xFF3A3A3C)]
+                          : [const Color(0xFFECEFF1), const Color(0xFFDDE4E8)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
                 border: Border.all(
                   color:
                       isDarkMode
-                          ? Colors.white.withOpacity(0.2)
-                          : const Color(0xFFCED4DA), // Bolder
+                          ? Colors.white.withOpacity(0.3)
+                          : const Color(0xFFCED4DA),
                   width: 1.5,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(isDarkMode ? 0.3 : 0.15),
-                    blurRadius: 14, // Stronger
-                    offset: const Offset(0, 4),
-                    spreadRadius: 2,
+                    color:
+                        isDarkMode
+                            ? const Color(0xFF007AFF).withOpacity(0.4)
+                            : Colors.black.withOpacity(0.2),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                    spreadRadius: 1,
                   ),
                 ],
               ),
               textStyle: TextStyle(
-                fontSize: screenWidth * 0.042, // Slightly larger
+                fontSize: screenWidth * 0.038,
                 fontWeight: FontWeight.w500,
                 color: isDarkMode ? Colors.white : const Color(0xFF1C2526),
               ),
               hint: "Select an option",
               prefixIcon: prefixIcon,
-              dropdownMaxHeight: screenHeight * 0.3,
-              animationDuration: const Duration(milliseconds: 400),
+              dropdownMaxHeight: screenHeight * 0.25,
+              animationDuration: const Duration(milliseconds: 300),
             ),
           ),
         ),
@@ -573,7 +552,6 @@ class _TimesheetFormState extends State<TimesheetForm> {
     );
   }
 
-  // Timing Row with Time Picker
   Widget _buildTimingRow(
     String label,
     TimeOfDay? time,
@@ -591,29 +569,31 @@ class _TimesheetFormState extends State<TimesheetForm> {
           child: GestureDetector(
             onTap: () => _pickTime(onPicked),
             child: Container(
-              margin: EdgeInsets.symmetric(
-                vertical: screenWidth * 0.015,
-              ), // Reduced
-              padding: const EdgeInsets.all(12.0),
+              margin: EdgeInsets.symmetric(vertical: screenWidth * 0.01),
+              padding: EdgeInsets.all(screenWidth * 0.03),
               decoration: BoxDecoration(
-                color:
-                    isDarkMode
-                        ? const Color(0xFF2C2C2E)
-                        : const Color(0xFFECEFF1), // Darker
-                borderRadius: BorderRadius.circular(12),
+                gradient: LinearGradient(
+                  colors:
+                      isDarkMode
+                          ? [const Color(0xFF2C2C2E), const Color(0xFF3A3A3C)]
+                          : [const Color(0xFFECEFF1), const Color(0xFFDDE4E8)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color:
                       isDarkMode
-                          ? Colors.white.withOpacity(0.2)
+                          ? Colors.white.withOpacity(0.3)
                           : const Color(0xFFCED4DA),
-                  width: 1.5,
+                  width: 1.0,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: accentColor.withOpacity(isDarkMode ? 0.25 : 0.15),
-                    blurRadius: 10, // Stronger
-                    offset: const Offset(0, 3),
-                    spreadRadius: 2,
+                    color: accentColor.withOpacity(isDarkMode ? 0.3 : 0.2),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                    spreadRadius: 1,
                   ),
                 ],
               ),
@@ -623,8 +603,8 @@ class _TimesheetFormState extends State<TimesheetForm> {
                     child: Text(
                       label,
                       style: TextStyle(
-                        fontSize: screenWidth * 0.042, // Slightly larger
-                        fontWeight: FontWeight.w600, // Bolder
+                        fontSize: screenWidth * 0.038,
+                        fontWeight: FontWeight.w600,
                         color:
                             isDarkMode
                                 ? Colors.white70
@@ -635,15 +615,15 @@ class _TimesheetFormState extends State<TimesheetForm> {
                   Text(
                     time != null ? time.format(context) : "Select Time",
                     style: TextStyle(
-                      fontSize: screenWidth * 0.042,
+                      fontSize: screenWidth * 0.038,
                       color: accentColor,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 6),
                   Icon(
                     CupertinoIcons.clock_fill,
-                    size: screenWidth * 0.05,
+                    size: screenWidth * 0.045,
                     color: accentColor,
                   ),
                 ],
@@ -655,7 +635,6 @@ class _TimesheetFormState extends State<TimesheetForm> {
     );
   }
 
-  // Time Picker Dialog
   Future<void> _pickTime(Function(TimeOfDay) onPicked) async {
     final picked = await showTimePicker(
       context: context,
@@ -668,14 +647,21 @@ class _TimesheetFormState extends State<TimesheetForm> {
               backgroundColor:
                   Theme.of(context).brightness == Brightness.dark
                       ? const Color(0xFF1C2526)
-                      : const Color(0xFFE8ECEF),
+                      : const Color(0xFFF5F7FA),
               hourMinuteTextColor: const Color(0xFF007AFF),
-              dialHandColor: const Color(0xFF007AFF),
+              dialHandColor: const Color(0xFF34C759),
               dialBackgroundColor:
                   Theme.of(context).brightness == Brightness.dark
                       ? const Color(0xFF2C2C2E)
                       : const Color(0xFFECEFF1),
-              entryModeIconColor: const Color(0xFF007AFF),
+              entryModeIconColor: const Color(0xFFFF9500),
+              dayPeriodTextColor: const Color(0xFF5856D6),
+              helpTextStyle: TextStyle(
+                color:
+                    Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white70
+                        : const Color(0xFF1C2526),
+              ),
             ),
           ),
           child: child!,
@@ -687,7 +673,6 @@ class _TimesheetFormState extends State<TimesheetForm> {
     }
   }
 
-  // Submit Handler
   void _submitForm() {
     debugPrint("Form Submitted");
     debugPrint("Location: $_selectedLocation");

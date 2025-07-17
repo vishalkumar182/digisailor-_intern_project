@@ -7,8 +7,6 @@ analyzer:
   errors:
     avoid_print: ignore
     deprecated_member_use: ignore
-    null_check_on_nullable_type_parameter: ignore
-    unnecessary_underscores: ignore
     use_super_parameters: ignore ignore
 
 linter:

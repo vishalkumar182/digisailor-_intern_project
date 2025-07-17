@@ -34,31 +34,26 @@ class QuickActionsSection extends StatelessWidget {
         SizedBox(height: screenWidth * 0.02),
         SizedBox(
           height:
-              height ??
-              55, // Breadth: Default height set to 60 (adjust this value as needed)
+              height ?? screenWidth * 0.15, // Reduced height for better balance
           child: SizedBox(
             width: double.infinity,
             child: InkWell(
               onTap: () => onActionPressed(actions[0]),
               borderRadius: BorderRadius.circular(12),
               child: Container(
-                padding: EdgeInsets.all(
-                  screenWidth * 0.03,
-                ), // Padding for internal spacing
+                padding: EdgeInsets.all(screenWidth * 0.02), // Reduced padding
                 decoration: BoxDecoration(
-                  color:
-                      isDarkMode
-                          ? const Color(0xFF2C2C2E)
-                          : const Color(0xFFFF9500),
+                  gradient: LinearGradient(
+                    colors: [const Color(0xFFFF9500), const Color(0xFFFF8C00)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color:
-                          isDarkMode
-                              ? Colors.black.withOpacity(0.4)
-                              : const Color(0xFFFF9500).withOpacity(0.5),
-                      blurRadius: 10,
-                      offset: const Offset(0, 5),
+                      color: const Color(0xFFFF9500).withOpacity(0.5),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
@@ -66,36 +61,34 @@ class QuickActionsSection extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(
-                        8,
-                      ), // Padding for icon circle
+                      padding: EdgeInsets.all(
+                        screenWidth * 0.03,
+                      ), // Reduced padding
                       decoration: BoxDecoration(
-                        color: const Color(0xFFFF9500),
+                        color: Colors.white.withOpacity(0.2),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
                             color: const Color(0xFFFF9500).withOpacity(0.6),
-                            blurRadius: 6,
-                            offset: const Offset(0, 3),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
                           ),
                         ],
                       ),
                       child: Icon(
                         CupertinoIcons.add_circled,
-                        size: screenWidth * 0.08, // Icon size
+                        size: screenWidth * 0.06, // Reduced icon size
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(
-                      width: screenWidth * 0.03,
-                    ), // Spacing between icon and text
+                    SizedBox(width: screenWidth * 0.02), // Reduced spacing
                     Text(
                       'Add Entry',
                       style: TextStyle(
-                        fontSize: screenWidth * 0.055, // Text font size
-                        fontWeight: FontWeight.w800,
+                        fontSize: screenWidth * 0.04, // Reduced font size
+                        fontWeight: FontWeight.w700,
                         color: Colors.white,
-                        letterSpacing: 1.0,
+                        letterSpacing: 0.8,
                       ),
                     ),
                   ],

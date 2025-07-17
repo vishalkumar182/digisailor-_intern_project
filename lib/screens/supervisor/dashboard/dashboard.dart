@@ -4,7 +4,6 @@ import 'package:construction_manager_app/screens/supervisor/bottom_navigation/bo
 import 'package:construction_manager_app/screens/supervisor/card_detail_data.dart/card1_detail.dart';
 import 'package:construction_manager_app/screens/supervisor/cusom_card/dashboard_card.dart';
 import 'package:construction_manager_app/screens/supervisor/dashboard/dashboard_data.dart';
-
 import 'package:construction_manager_app/screens/supervisor/dashboard/project_detail_page.dart';
 import 'package:construction_manager_app/screens/supervisor/entries/supervisor_entries_screen.dart';
 import 'package:construction_manager_app/screens/supervisor/quick_action/quick_actions.dart';
@@ -13,6 +12,7 @@ import 'package:construction_manager_app/screens/supervisor/welcome_card/welcome
 import 'package:construction_manager_app/screens/supervisor/profiles/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:construction_manager_app/screens/supervisor/recent_entries.dart';
 
 /// Main dashboard screen for supervisors with navigation and key functionality
 class SupervisorDashboardScreen extends StatefulWidget {
@@ -106,32 +106,40 @@ class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen>
 
   /// Builds the home tab content with dashboard widgets
   Widget _buildHomeContent() {
-    return Builder(
-      builder:
-          (context) => SingleChildScrollView(
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () => _handleProjectTap(context),
-                  child: WelcomeCard(
-                    supervisorName: defaultAppBarData.supervisorName,
-                    currentProject: currentProject,
-                  ),
-                ),
-                DashboardCardsRow(
-                  cards: _dashboardCards,
-                  onCardTap: (card) => _handleCardTap(context, card),
-                  height: 12,
-                ),
-                const SizedBox(height: 20),
-                QuickActionsSection(
-                  onActionPressed: _handleQuickAction,
-                  actions: ['Add Entry'],
-                ),
-                const SizedBox(height: 20),
-              ],
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(vertical: screenWidth * 0.04),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Welcome Card Section
+          GestureDetector(
+            onTap: () => _handleProjectTap(context),
+            child: WelcomeCard(
+              supervisorName: defaultAppBarData.supervisorName,
+              currentProject: currentProject,
             ),
           ),
+          SizedBox(height: screenWidth * 0.04), // Uniform spacing
+          // Dashboard Cards Row Section
+          DashboardCardsRow(
+            cards: _dashboardCards,
+            onCardTap: (card) => _handleCardTap(context, card),
+            height: screenWidth * 0.4, // Default height
+          ),
+          SizedBox(height: screenWidth * 0.04), // Uniform spacing
+          // Recent Entries Section
+          const RecentEntries(),
+          SizedBox(height: screenWidth * 0.04), // Uniform spacing
+          // Quick Actions Section
+          QuickActionsSection(
+            onActionPressed: _handleQuickAction,
+            actions: ['Add Entry'],
+            height: screenWidth * 0.15, // Adjusted to match reduced size
+          ),
+        ],
+      ),
     );
   }
 
