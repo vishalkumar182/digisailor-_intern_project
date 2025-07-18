@@ -7,7 +7,7 @@ analyzer:
   errors:
     avoid_print: ignore
     deprecated_member_use: ignore
-    use_super_parameters: ignore ignore
+    use_super_parameters: ignore # ✅ Fixed here
 
 linter:
   rules:

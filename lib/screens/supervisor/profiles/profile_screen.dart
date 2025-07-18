@@ -6,6 +6,7 @@ import 'package:construction_manager_app/widgets/custom_logout_button.dart';
 import 'package:construction_manager_app/widgets/edit_personal_details.dart';
 import 'package:construction_manager_app/widgets/edit_address.dart';
 import 'package:construction_manager_app/services/auth/login_service.dart';
+import 'package:construction_manager_app/screens/supervisor/profiles/app_settings.dart';
 
 class SupervisorProfileScreen extends StatefulWidget {
   const SupervisorProfileScreen({super.key});
@@ -169,12 +170,35 @@ class _SupervisorProfileScreenState extends State<SupervisorProfileScreen> {
             screenWidth,
             const Color(0xFF5856D6),
           ),
-          _buildSimpleOption(
-            CupertinoIcons.gear_alt_fill,
-            'App Settings',
-            isDarkMode,
-            screenWidth,
-            const Color(0xFFFF9500),
+          GestureDetector(
+            onTap: () {
+              HapticFeedback.lightImpact();
+              debugPrint('Tapped App Settings'); // Debug to confirm tap
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder:
+                    (context) => DraggableScrollableSheet(
+                      initialChildSize: 0.5,
+                      minChildSize: 0.4,
+                      maxChildSize: 0.7,
+                      builder:
+                          (context, scrollController) =>
+                              ThemeSettingsScreen(screenWidth: screenWidth),
+                    ),
+              ).then((value) {
+                // Refresh state after closing modal
+                setState(() {});
+              });
+            },
+            child: _buildSimpleOption(
+              CupertinoIcons.gear_alt_fill,
+              'App Settings',
+              isDarkMode,
+              screenWidth,
+              const Color(0xFFFF9500),
+            ),
           ),
           _buildSimpleOption(
             CupertinoIcons.question_circle_fill,
@@ -428,10 +452,33 @@ class _SupervisorProfileScreenState extends State<SupervisorProfileScreen> {
     Color iconColor,
   ) {
     return GestureDetector(
-      onTap: () {
-        HapticFeedback.lightImpact();
-        //
-      },
+      onTap:
+          title == 'App Settings'
+              ? () {
+                HapticFeedback.lightImpact();
+                debugPrint('Tapped App Settings'); // Debug to confirm tap
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder:
+                      (context) => DraggableScrollableSheet(
+                        initialChildSize: 0.5,
+                        minChildSize: 0.4,
+                        maxChildSize: 0.7,
+                        builder:
+                            (context, scrollController) =>
+                                ThemeSettingsScreen(screenWidth: screenWidth),
+                      ),
+                ).then((value) {
+                  // Refresh state after closing modal
+                  setState(() {});
+                });
+              }
+              : () {
+                HapticFeedback.lightImpact();
+                // Handle other tap actions if needed
+              },
       child: Container(
         margin: EdgeInsets.only(bottom: screenWidth * 0.025),
         decoration: BoxDecoration(
