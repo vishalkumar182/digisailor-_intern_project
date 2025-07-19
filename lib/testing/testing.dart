@@ -1,78 +1,88 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 void main() {
-  runApp(TextToSpeechApp());
+  runApp(SpeechToTextApp());
 }
 
-class TextToSpeechApp extends StatelessWidget {
-  const TextToSpeechApp({super.key});
-
+class SpeechToTextApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'TTS Demo',
-      theme: ThemeData.dark(),
-      home: TTSHomePage(),
+      home: SpeechHomePage(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class TTSHomePage extends StatefulWidget {
-  const TTSHomePage({super.key});
-
+class SpeechHomePage extends StatefulWidget {
   @override
-  // ignore: library_private_types_in_public_api
-  _TTSHomePageState createState() => _TTSHomePageState();
+  _SpeechHomePageState createState() => _SpeechHomePageState();
 }
 
-class _TTSHomePageState extends State<TTSHomePage> {
-  final FlutterTts flutterTts = FlutterTts();
-  final TextEditingController _controller = TextEditingController();
-
-  Future<void> _speak() async {
-    String text = _controller.text.trim();
-    if (text.isNotEmpty) {
-      await flutterTts.setLanguage("en-IN"); // or "hi-IN" for Hindi
-      await flutterTts.setPitch(1.0);
-      await flutterTts.setSpeechRate(0.5);
-      await flutterTts.speak(text);
-    }
-  }
+class _SpeechHomePageState extends State<SpeechHomePage> {
+  late stt.SpeechToText _speech;
+  bool _isListening = false;
+  String _text = 'Press the mic and start speaking...';
 
   @override
-  void dispose() {
-    flutterTts.stop();
-    _controller.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    _speech = stt.SpeechToText();
+  }
+
+  void _listen() async {
+    if (!_isListening) {
+      bool available = await _speech.initialize(
+        onStatus: (status) => print('Status: $status'),
+        onError: (errorNotification) => print('Error: $errorNotification'),
+      );
+
+      if (available) {
+        setState(() => _isListening = true);
+        _speech.listen(
+          onResult: (result) => setState(() {
+            _text = result.recognizedWords;
+          }),
+        );
+      } else {
+        setState(() => _isListening = false);
+        _speech.stop();
+      }
+    } else {
+      setState(() => _isListening = false);
+      _speech.stop();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Text to Speech'), centerTitle: true),
+      appBar: AppBar(
+        title: Text('Speech to Text Tester'),
+        centerTitle: true,
+        backgroundColor: Colors.deepPurple,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            TextField(
-              controller: _controller,
-              maxLines: 4,
-              decoration: InputDecoration(
-                labelText: "Enter text",
-                border: OutlineInputBorder(),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.deepPurple),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(_text, style: const TextStyle(fontSize: 18)),
               ),
             ),
             const SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: _speak,
-              icon: Icon(Icons.volume_up),
-              label: Text("Speak"),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                textStyle: TextStyle(fontSize: 18),
-              ),
+            FloatingActionButton(
+              onPressed: _listen,
+              child: Icon(_isListening ? Icons.mic : Icons.mic_none),
+              backgroundColor: Colors.deepPurple,
             ),
           ],
         ),

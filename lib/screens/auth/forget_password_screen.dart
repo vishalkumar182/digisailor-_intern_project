@@ -6,6 +6,7 @@ class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
 }
 
@@ -310,11 +311,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                                   fontSize: screenWidth * 0.042,
                                   color: const Color.fromARGB(
                                     255,
-                                    13,
-                                    5,
-                                    5,
+                                    21,
+                                    21,
+                                    21,
                                   ), // Teal for contrast
-                                  // Match underline to text color
+                                  fontWeight: FontWeight.w600,
+                                  decoration:
+                                      TextDecoration
+                                          .none, // none kar diya aur woh yellow line chala gaya
+                                  decorationColor: const Color(
+                                    0xFF2DD4BF,
+                                  ), // Match underline to text color
                                 ),
                               ),
                             ),

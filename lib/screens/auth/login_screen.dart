@@ -192,7 +192,7 @@ class _LoginScreenState extends State<LoginScreen>
                           ),
                           SizedBox(height: isSmallScreen ? 4 : 6),
                           Text(
-                            'Sign in to manage your projects',
+                            'Login to manage your projects',
                             style: TextStyle(
                               fontSize: screenWidth * 0.038,
                               fontWeight: FontWeight.w500,
@@ -295,7 +295,7 @@ class _LoginScreenState extends State<LoginScreen>
                         padding: EdgeInsets.symmetric(
                           vertical: screenHeight * 0.018,
                         ),
-                        color: const Color(0xFF007AFF),
+                        color: const Color.fromARGB(255, 255, 123, 0),
                         borderRadius: BorderRadius.circular(14),
                         onPressed:
                             _isLoading
@@ -311,7 +311,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   color: Colors.white,
                                 )
                                 : Text(
-                                  'Sign In',
+                                  'Login',
                                   style: TextStyle(
                                     fontSize: screenWidth * 0.045,
                                     fontWeight: FontWeight.w700,

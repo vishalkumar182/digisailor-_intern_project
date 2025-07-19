@@ -56,16 +56,26 @@ class _SignUpScreenState extends State<SignUpScreen>
     }
 
     setState(() => _isLoading = true);
-
-    // Dummy signup logic for UI testing
     await Future.delayed(const Duration(seconds: 1)); // Simulate network delay
     setState(() => _isLoading = false);
-
-    // Always show success for dummy data
-    _showSuccessDialog();
+    _showSuccessDialog('Signed up with Email');
   }
 
-  void _showSuccessDialog() {
+  Future<void> _handleGoogleSignIn() async {
+    setState(() => _isLoading = true);
+    await Future.delayed(const Duration(seconds: 1)); // Simulate Google sign-in
+    setState(() => _isLoading = false);
+    _showSuccessDialog('Signed up with Google');
+  }
+
+  Future<void> _handleAppleSignIn() async {
+    setState(() => _isLoading = true);
+    await Future.delayed(const Duration(seconds: 1)); // Simulate Apple sign-in
+    setState(() => _isLoading = false);
+    _showSuccessDialog('Signed up with Apple');
+  }
+
+  void _showSuccessDialog(String method) {
     showCupertinoDialog(
       context: context,
       builder:
@@ -82,7 +92,7 @@ class _SignUpScreenState extends State<SignUpScreen>
             content: Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Text(
-                'Your account has been created. Please log in.',
+                'Your account has been created using $method. Please log in.',
                 style: TextStyle(
                   fontSize: 16,
                   color: const Color(0xFF6B7280),
@@ -197,7 +207,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                           ),
                           SizedBox(height: screenHeight * 0.015),
                           Text(
-                            'Enter your details to sign up.',
+                            'Sign up using Google, Apple, or your email.',
                             style: TextStyle(
                               fontSize: screenWidth * 0.042,
                               color: const Color(0xFF6B7280),
@@ -206,6 +216,153 @@ class _SignUpScreenState extends State<SignUpScreen>
                             ),
                           ),
                           SizedBox(height: screenHeight * 0.05),
+                          // Google Sign-In Button
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.grey.shade300,
+                                width: 1,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.1),
+                                  spreadRadius: 1,
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: CupertinoButton(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              borderRadius: BorderRadius.circular(12),
+                              onPressed:
+                                  _isLoading ? null : _handleGoogleSignIn,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // Placeholder for Google logo (replace with actual asset)
+                                  Container(
+                                    width: 24,
+                                    height: 24,
+                                    color: Colors.grey.shade200, // Placeholder
+                                    child: Center(
+                                      child: Image.asset(
+                                        "assets/images/google.png", // Replace with your actual asset path
+                                        fit: BoxFit.contain,
+                                        width: 20,
+                                        height: 20,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Text(
+                                    'Continue with Google',
+                                    style: TextStyle(
+                                      fontSize: screenWidth * 0.045,
+                                      fontWeight: FontWeight.w500,
+                                      color: const Color(0xFF1F2937),
+                                      decoration: TextDecoration.none,
+                                      fontFamily:
+                                          'Roboto', // Google recommends Roboto
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: screenHeight * 0.02),
+                          // Apple Sign-In Button
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: const Color(
+                                0xFF1F2937,
+                              ), // Dark grey for Apple
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.1),
+                                  spreadRadius: 1,
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: CupertinoButton(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              borderRadius: BorderRadius.circular(12),
+                              onPressed: _isLoading ? null : _handleAppleSignIn,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(
+                                        4,
+                                      ), // Optional: Rounded corners
+                                    ),
+                                    child: Center(
+                                      child: Image.asset(
+                                        'assets/images/apple.png', // Replace with your actual path
+                                        fit: BoxFit.contain,
+                                        width: 20,
+                                        height: 20,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Text(
+                                    'Continue with Apple',
+                                    style: TextStyle(
+                                      fontSize: screenWidth * 0.045,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                      decoration: TextDecoration.none,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: screenHeight * 0.03),
+                          // Divider
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Divider(
+                                  color: Colors.grey.shade400,
+                                  thickness: 0.5,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                ),
+                                child: Text(
+                                  'OR',
+                                  style: TextStyle(
+                                    fontSize: screenWidth * 0.04,
+                                    color: const Color(0xFF6B7280),
+                                    decoration: TextDecoration.none,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Divider(
+                                  color: Colors.grey.shade400,
+                                  thickness: 0.5,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: screenHeight * 0.03),
+                          // Email/Password Fields
                           Container(
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -323,6 +480,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                             ),
                           ),
                           SizedBox(height: screenHeight * 0.04),
+                          // Sign Up Button
                           Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
@@ -374,9 +532,17 @@ class _SignUpScreenState extends State<SignUpScreen>
                                 'Back to Login',
                                 style: TextStyle(
                                   fontSize: screenWidth * 0.042,
-                                  color: const Color.fromARGB(255, 1, 16, 16),
+                                  color: const Color.fromARGB(255, 4, 8, 8),
                                   fontWeight: FontWeight.w600,
-
+                                  decoration:
+                                      TextDecoration
+                                          .none, // text decoration ko nuone kar diya aur line hat gaya
+                                  decorationColor: const Color.fromARGB(
+                                    255,
+                                    2,
+                                    20,
+                                    17,
+                                  ),
                                   decorationThickness: 1.5,
                                 ),
                               ),
